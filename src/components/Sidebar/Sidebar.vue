@@ -8,9 +8,11 @@
       <header class="logo">
         <router-link to="/app"><span class="primary-word">Sing</span> App</router-link>
       </header>
-      <ul class="nav" v-for="route in routes" :key="route.meta.breadcrumb.label+'.navlink'">
+      <ul class="nav">
         <!-- {{route}} -->
         <NavLink
+          v-for="route in routes"
+          :key="route.meta.breadcrumb.label+'.navlink'"
           :activeItem="activeItem"
           :header="route.meta.breadcrumb.label"
           :link="{name: route.name }"

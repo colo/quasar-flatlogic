@@ -24,7 +24,7 @@ const routes = [
       {
         name: 'system',
         path: 'system',
-        component: () => import(/* webpackChunkName: "system" */ 'pages/Dashboard/Dashboard'),
+        // component: () => import(/* webpackChunkName: "system" */ 'pages/Dashboard/Dashboard'),
         redirect: { name: 'system_hosts' },
 
         meta: {
@@ -36,7 +36,7 @@ const routes = [
             name: 'system_hosts',
             component: () => import(/* webpackChunkName: "system.hosts" */ 'pages/Dashboard/Dashboard'),
             meta: {
-              breadcrumb: { label: 'System Hosts', icon: 'widgets', navbar: true }
+              breadcrumb: { label: 'Hosts', icon: 'widgets', navbar: true }
             },
             children: [
               {
@@ -44,7 +44,7 @@ const routes = [
                 name: 'system_host',
                 component: () => import(/* webpackChunkName: "system.host" */ 'pages/Dashboard/Dashboard'),
                 meta: {
-                  breadcrumb: { label: 'System Host', icon: 'widgets' }
+                  breadcrumb: { label: 'Host', icon: 'widgets' }
                 }
               }
             ]
@@ -54,7 +54,7 @@ const routes = [
             name: 'system_categories',
             component: () => import(/* webpackChunkName: "system.hosts" */ 'pages/Dashboard/Dashboard'),
             meta: {
-              breadcrumb: { label: 'System Categories', icon: 'widgets', navbar: true }
+              breadcrumb: { label: 'Categories', icon: 'widgets', navbar: true }
             },
             children: [
               {
@@ -62,7 +62,7 @@ const routes = [
                 name: 'system_category',
                 component: () => import(/* webpackChunkName: "system.category" */ 'pages/Dashboard/Dashboard'),
                 meta: {
-                  breadcrumb: { label: 'System Category', icon: 'widgets', app: 'system' }
+                  breadcrumb: { label: 'Category', icon: 'widgets', app: 'system' }
                 }
               }
             ]

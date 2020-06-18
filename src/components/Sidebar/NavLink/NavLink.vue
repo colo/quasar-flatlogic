@@ -61,7 +61,10 @@ export default {
     className: { type: String, default: '' },
     isHeader: { type: Boolean, default: false },
     deep: { type: Number, default: 0 },
-    activeItem: { type: String, default: '' },
+    activeItem: {
+      type: [String, Object],
+      default: () => ({})
+    },
     label: { type: String },
     labelColor: { type: String, default: 'warning' },
     index: { type: String },
@@ -84,10 +87,11 @@ export default {
       return `fi ${this.iconName}`
     },
     isActive () {
-      debug('isActive', this.activeItem)
+      debug('isActive', this.activeItem, this.index)
       return (this.activeItem &&
-      this.activeItem.includes(this.index) &&
-      this.headerLinkWasClicked)
+        this.activeItem.name && this.activeItem.name.indexOf(this.index) > -1 &&
+        // this.activeItem.includes(this.index) &&
+        this.headerLinkWasClicked)
     },
   },
 }
