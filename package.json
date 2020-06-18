@@ -14,6 +14,7 @@
   "dependencies": {
     "@amcharts/amcharts4": "^4.6.1",
     "@amcharts/amcharts4-geodata": "^4.1.7",
+    "@mdi/font": "^5.3.45",
     "@quasar/extras": "^1.0.0",
     "animate.css": "^3.6.1",
     "animated-number-vue": "^1.0.0",
@@ -44,9 +45,12 @@
     "vue-i18n": "^8.0.0",
     "vue-router": "^3.0.1",
     "vue-toasted": "^1.1.27",
-    "vue2-google-maps": "0.10.7",
+    "vue2-google-maps": "^0.10.2",
     "vuex": "^3.0.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "rickshaw": "1.6.6",
+    "vue-touch": "2.0.0-beta.4",
+    "vuetrend": "^0.3.2"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",

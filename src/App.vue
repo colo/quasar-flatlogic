@@ -15,8 +15,8 @@ export default {
       this.$router.push('/login')
     }
 
-    // if (currentPath === '/' || currentPath === '/app') {
-    //   this.$router.push('/')
+    // if (currentPath === '/') { // || currentPath === '/app'
+    //   this.$router.push('/dashboard')
     // }
   },
 }

@@ -8,16 +8,18 @@
       <header class="logo">
         <router-link to="/app"><span class="primary-word">Sing</span> App</router-link>
       </header>
-      <ul class="nav">
+      <ul class="nav" v-for="route in routes" :key="route.meta.breadcrumb.label+'.navlink'">
+        <!-- {{route}} -->
         <NavLink
-            :activeItem="activeItem"
-            header="Dashboard"
-            link="/"
-            iconName="flaticon-home"
-            index="dashboard"
-            isHeader
+          :activeItem="activeItem"
+          :header="route.meta.breadcrumb.label"
+          :link="{name: route.name }"
+          :iconName="route.meta.breadcrumb.icon"
+          :index="route.meta.breadcrumb.label.toLowerCase()"
+          isHeader
+          :childrenLinks="route.meta.breadcrumb.children"
         />
-        <NavLink
+        <!-- <NavLink
             :activeItem="activeItem"
             header="Typography"
             link="/app/typography"
@@ -53,6 +55,7 @@
               { header: 'Maps', link: '/app/components/maps' },
             ]"
         />
+        -->
       </ul>
       <p>
       <h5 class="navTitle">
@@ -102,15 +105,21 @@
 </template>
 
 <script>
+import * as Debug from 'debug'
+const debug = Debug('components:Sidebar')
+
 import { mapState, mapActions } from 'vuex'
 import isScreen from '@libs/screenHelper'
 import NavLink from './NavLink/NavLink'
+
+import Routes from '../../router/routes'
 
 export default {
   name: 'Sidebar',
   components: { NavLink },
   data () {
     return {
+
       alerts: [
         {
           id: 0,
@@ -129,6 +138,7 @@ export default {
       ],
     }
   },
+
   methods: {
     ...mapActions('layout', ['changeSidebarActive', 'switchSidebar']),
     setActiveByRoute () {
@@ -148,11 +158,62 @@ export default {
         this.changeSidebarActive(null)
       }
     },
+    __append_routes: function (routes, dest) {
+      routes.forEach(function (route) {
+        if (route && route.meta && route.meta.breadcrumb && route.meta.breadcrumb.navbar === true) {
+          if (route.children) {
+            route.children.forEach(function (child) {
+              // debug('Route', child)
+              if (child && child.meta && child.meta.breadcrumb && child.meta.breadcrumb.navbar === true) {
+                if (!route.meta.breadcrumb.children) route.meta.breadcrumb.children = []
+                if (route.meta.breadcrumb.children.every(function (_child) {
+                  debug('every', _child, child)
+                  return _child.header !== child.meta.breadcrumb.label
+                })
+                ) {
+                  let link = (child.name) ? {name: child.name} : '/' + route.path + '/' + child.path
+                  route.meta.breadcrumb.children.push({header: child.meta.breadcrumb.label, link: link})
+                }
+              }
+            })
+          }
+
+          dest.push(route)
+        } else if (route && route.children) {
+          this.__append_routes(route.children, dest)
+          // route.children.forEach(function (child) {
+          //   this.__append_routes(child)
+          // //   // debug('Route', child)
+          // //   if (child && child.meta && child.meta.breadcrumb) {
+          // //     routes.push(child)
+          // //   }
+          // }.bind(this))
+        }
+      }.bind(this))
+    }
   },
   created () {
+    debug('life cycle created', this.$route, Routes)
     this.setActiveByRoute()
   },
   computed: {
+    routes: function () {
+      let routes = []
+      this.__append_routes(Routes, routes)
+      // // return Routes.filter(function (route) {
+      // //   return route && route.meta && route.meta.breadcrumb
+      // // })
+      //
+      // Routes.forEach(function (route) {
+      //   // debug('Route', route)
+      //   let _route = this.process_route(route)
+      //   if (_route) { routes.push(route) }
+      // }.bind(this))
+      //
+      // debug('Routes %o', routes)
+      //
+      return routes
+    },
     ...mapState('layout', {
       sidebarStatic: state => state.sidebarStatic,
       sidebarOpened: state => !state.sidebarClose,

@@ -28,7 +28,7 @@
           :index="link.index"
           :link="link.link"
           :childrenLinks="link.childrenLinks"
-          :key="link.link"
+          :key="(typeof link.link === 'string') ? link.link : link.name"
         />
       </ul>
     </b-collapse>
@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import * as Debug from 'debug'
+const debug = Debug('components:Sidebar:NavLink')
+
 import { mapActions } from 'vuex'
 
 export default {
@@ -50,7 +53,10 @@ export default {
     header: { type: String, default: '' },
     iconName: { type: String, default: '' },
     headerLink: { type: String, default: '' },
-    link: { type: String, default: '' },
+    link: {
+      type: [String, Object],
+      default: () => ({})
+    },
     childrenLinks: { type: Array, default: null },
     className: { type: String, default: '' },
     isHeader: { type: Boolean, default: false },
@@ -78,6 +84,7 @@ export default {
       return `fi ${this.iconName}`
     },
     isActive () {
+      debug('isActive', this.activeItem)
       return (this.activeItem &&
       this.activeItem.includes(this.index) &&
       this.headerLinkWasClicked)
