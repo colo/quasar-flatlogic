@@ -1,4 +1,4 @@
-@import '../../styles/app';
+@import '@styles/app';
 
 .notifications {
   @include media-breakpoint-up(md) {
