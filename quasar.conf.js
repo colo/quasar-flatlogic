@@ -94,8 +94,8 @@ module.exports = function (/* ctx */) {
           '@mixins': path.resolve(__dirname, './src/components/mixins'),
           '@wrappers': path.resolve(__dirname, './src/components/wrappers'),
           '@apps': path.resolve(__dirname, './src/apps'),
-          '@styles': path.resolve(__dirname, './src/styles'),
-          // '@skins': path.resolve(__dirname, './src/skins')
+          // '@styles': path.resolve(__dirname, './src/styles/sing-app'),
+          '@styles': path.resolve(__dirname, './src/styles/light-blue'),
           vue$: 'vue/dist/vue.runtime.esm.js'
         }
       }

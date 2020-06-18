@@ -79,7 +79,8 @@ export default {
     togglePanelCollapse (link) {
       this.changeSidebarActive(link)
       this.headerLinkWasClicked = !this.headerLinkWasClicked ||
-      !this.activeItem.includes(this.index)
+      (this.activeItem.name && this.activeItem.name.indexOf(this.index) > -1)
+      // !this.activeItem.includes(this.index)
     },
   },
   computed: {

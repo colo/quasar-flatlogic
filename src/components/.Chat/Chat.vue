@@ -60,7 +60,7 @@
         >
             <span class="thumb-sm">
               <img v-if="message.fromMe"
-                class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
+                class="rounded-circle" src="@styles/assets/people/a5.jpg" alt="..." />
               <img v-else
                 class="rounded-circle" :src="conversation.image" alt="..." />
             </span>
@@ -79,12 +79,12 @@
 import Vue from 'vue';
 import { mapState, mapActions } from 'vuex';
 
-import a1 from '../../assets/people/a1.jpg';
-import a2 from '../../assets/people/a2.jpg';
-import a3 from '../../assets/people/a3.jpg';
-import a4 from '../../assets/people/a4.jpg';
-import a5 from '../../assets/people/a5.jpg';
-import a6 from '../../assets/people/a6.jpg';
+import a1 from '@styles/assets/people/a1.jpg';
+import a2 from '@styles/assets/people/a2.jpg';
+import a3 from '@styles/assets/people/a3.jpg';
+import a4 from '@styles/assets/people/a4.jpg';
+import a5 from '@styles/assets/people/a5.jpg';
+import a6 from '@styles/assets/people/a6.jpg';
 import { MessageStates } from '../../store/layout';
 
 export default {

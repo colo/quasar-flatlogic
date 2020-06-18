@@ -48,7 +48,7 @@
         right>
         <template slot="button-content">
           <span class="avatar rounded-circle thumb-sm float-left mr-2">
-            <img class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
+            <img class="rounded-circle" src="@styles/assets/people/a5.jpg" alt="..." />
           </span>
           <span class="small">Philip Smith</span>
           <span class="ml-1 circle bg-primary text-white fw-bold">13</span>

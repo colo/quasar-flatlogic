@@ -6,8 +6,8 @@ $glyphicons-halflings-include-bonus: false !default;
 $glyphicons-halflings-class-prefix: glyphicon !default;
 $glyphicons-halflings-font-base-size: 14px !default;
 
-$glyphicons-halflings-font-path: '../fonts/glyphicons' !default;
-$fa-font-path: '../fonts/font-awesome' !default;
+$glyphicons-halflings-font-path: '@styles/fonts/glyphicons' !default;
+$fa-font-path: '@styles/fonts/font-awesome' !default;
 
 /*
  * Fonts
@@ -111,6 +111,13 @@ $border-radius-sm:       0.25rem !default;
 
 //== Sidebar
 //
+// @start from sign-app
+$sidebar-width-open: 224px;
+$sidebar-width-closed: 50px;
+$sidebar-item-border-color: transparent !default;
+$sidebar-scrollbar-bg: $gray-200;
+
+// @end from sign-app
 
 $sidebar-width: 200px;
 $sidebar-transition-time: 0.3s !default;
