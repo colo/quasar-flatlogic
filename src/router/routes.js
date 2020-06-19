@@ -69,7 +69,87 @@ const routes = [
           }
 
         ]
-      }
+      },
+      {
+        path: 'logs',
+        name: 'logs',
+        redirect: { name: 'logs_all' },
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        // component: () => import(/* webpackChunkName: "logs" */ 'pages/Dashboard/Dashboard'),
+        meta: {
+          breadcrumb: { label: 'Logs', icon: 'flaticon-log', navbar: true }
+        },
+
+        children: [
+          {
+            path: '',
+            name: 'logs_all',
+            // redirect: { name: 'logs_all' },
+            component: () => import(/* webpackChunkName: "logs.all" */ 'pages/Dashboard/Dashboard'),
+            meta: {
+              breadcrumb: { label: 'All', icon: 'widgets', navbar: false }
+            }
+
+          },
+          {
+            path: 'educativa',
+            name: 'logs_educativa',
+            // redirect: { name: 'logs_educativa_all' },
+            component: () => import(/* webpackChunkName: "logs.educativa" */ 'pages/Dashboard/Dashboard'),
+            meta: {
+              breadcrumb: { label: 'Educativa', icon: 'widgets', navbar: true }
+            },
+            children: [
+              {
+                path: '',
+                name: 'logs_educativa_all',
+                component: () => import(/* webpackChunkName: "logs.educativa.all" */ 'pages/Dashboard/Dashboard'),
+                meta: {
+                  breadcrumb: { label: 'Educativa All', icon: 'widgets', navbar: false }
+                }
+              },
+              {
+                path: 'filter',
+                name: 'logs_educativa_filter',
+                component: () => import(/* webpackChunkName: "logs.educativa.filter" */ 'pages/Dashboard/Dashboard'),
+                meta: {
+                  breadcrumb: { label: 'Educativa Filter', icon: 'widgets', navbar: false }
+                }
+              }
+            ]
+          },
+          {
+            path: 'web',
+            name: 'logs_web',
+            // redirect: { name: 'logs_web_all' },
+            component: () => import(/* webpackChunkName: "logs.web" */ 'pages/Dashboard/Dashboard'),
+            meta: {
+              breadcrumb: { label: 'Web', icon: 'widgets', navbar: true }
+            },
+            children: [
+              {
+                path: '',
+                name: 'logs_web_all',
+                component: () => import(/* webpackChunkName: "logs.weba.ll" */ 'pages/Dashboard/Dashboard'),
+                meta: {
+                  breadcrumb: { label: 'Web All', icon: 'widgets', navbar: false }
+                }
+              },
+              {
+                path: 'filter',
+                name: 'logs_web_filter',
+                component: () => import(/* webpackChunkName: "logs.web.filter" */ 'pages/Dashboard/Dashboard'),
+                meta: {
+                  breadcrumb: { label: 'Web Filter', icon: 'widgets', navbar: false }
+                }
+              }
+            ]
+          }
+
+        ]
+      },
     ]
   }
 ]

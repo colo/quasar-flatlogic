@@ -4,6 +4,9 @@
   </div>
 </template>
 <script>
+import * as Debug from 'debug'
+const debug = Debug('components:BreadcrumbHistory')
+
 export default {
   name: 'BreadcrumbHistory',
   props: {
@@ -14,6 +17,8 @@ export default {
       return this.exclude.indexOf(this.$route.path.split('/').pop()) > -1
     },
     tree () {
+      debug('tree', this.$route.path)
+
       return ['YOU ARE HERE']
         .concat(this.$route.path
           .split('/')
