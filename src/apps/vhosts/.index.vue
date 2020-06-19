@@ -17,7 +17,7 @@
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+// import HelloWorld from '@components/flatlogic/HelloWorld.vue'
 
 import * as Debug from 'debug'
 const debug = Debug('apps:root')

@@ -46,7 +46,7 @@
 
 <script>
 import Vue from 'vue'
-import Widget from '@/components/Widget/Widget'
+import Widget from '@components/flatlogic/Widget/Widget'
 
 export default {
   name: 'BigStat',

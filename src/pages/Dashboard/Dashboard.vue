@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import Widget from '@/components/Widget/Widget'
+import Widget from '@components/flatlogic/Widget/Widget'
 import BigStat from './components/BigStat/BigStat'
 import mock from './mock'
 

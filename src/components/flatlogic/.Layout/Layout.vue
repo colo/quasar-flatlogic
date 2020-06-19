@@ -21,10 +21,10 @@
 import { createNamespacedHelpers } from 'vuex';
 const { mapState, mapActions } = createNamespacedHelpers('layout');
 
-import Sidebar from '@/components/Sidebar/Sidebar';
-import Header from '@/components/Header/Header';
-import Helper from '@/components/Helper/Helper';
-import BreadcrumbHistory from '@/components/BreadcrumbHistory/BreadcrumbHistory';
+import Sidebar from '@components/flatlogic/Sidebar/Sidebar';
+import Header from '@components/flatlogic/Header/Header';
+import Helper from '@components/flatlogic/Helper/Helper';
+import BreadcrumbHistory from '@components/flatlogic/BreadcrumbHistory/BreadcrumbHistory';
 
 import './Layout.scss';
 

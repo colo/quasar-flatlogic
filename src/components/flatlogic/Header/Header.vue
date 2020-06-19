@@ -76,7 +76,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-// import Notifications from '@/components/Notifications/Notifications'
+// import Notifications from '@components/flatlogic/Notifications/Notifications'
 
 export default {
   name: 'Header',

@@ -114,7 +114,7 @@ import { mapState, mapActions } from 'vuex'
 import isScreen from '@libs/screenHelper'
 import NavLink from './NavLink/NavLink'
 
-import Routes from '../../router/routes'
+import Routes from '../../../router/routes'
 
 export default {
   name: 'Sidebar',

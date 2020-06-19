@@ -14,7 +14,7 @@ import Trend from 'vuetrend'
 import Toasted from 'vue-toasted'
 import VueApexCharts from 'vue-apexcharts'
 import layoutMixin from 'src/mixins/layout'
-import Widget from 'src/components/Widget/Widget'
+import Widget from 'src/components/flatlogic/Widget/Widget'
 
 // leave the export, even if you don't use it
 export default ({ app, router, Vue }) => {
