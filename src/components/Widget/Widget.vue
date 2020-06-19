@@ -178,3 +178,5 @@ export default {
   }
 }
 </script>
+
+<style src="./Widget.scss" lang="scss" />

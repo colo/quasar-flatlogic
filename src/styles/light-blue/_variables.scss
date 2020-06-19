@@ -6,8 +6,8 @@ $glyphicons-halflings-include-bonus: false !default;
 $glyphicons-halflings-class-prefix: glyphicon !default;
 $glyphicons-halflings-font-base-size: 14px !default;
 
-$glyphicons-halflings-font-path: '@styles/fonts/glyphicons' !default;
-$fa-font-path: '@styles/fonts/font-awesome' !default;
+$glyphicons-halflings-font-path: 'fonts/glyphicons' !default;
+$fa-font-path: 'fonts/font-awesome' !default;
 
 /*
  * Fonts
@@ -99,9 +99,14 @@ $headings-font-weight: 300;
 //== Components
 //
 
+// @start from sign-app
+$content-padding: 40px;
+$content-padding-sm: 15px;
+// @end from sign-app
+
 $grid-gutter-width: 40px;
 
-$content-padding: 2.85rem;
+// $content-padding: 2.85rem;
 
 $nav-link-padding: 10px;
 
@@ -131,6 +136,7 @@ $sidebar-item-active-color: #fff !default;
 // Widgets
 // -------------------------
 $widget-bg: rgba(0,0,0,.24);
+$widget-bg-color: rgba(0,0,0,.24);
 $widget-title-color: #fff;
 $widget-shadow: 0 23px 20px -20px rgba(darken($body-bg, 25%),0.1), 0 0 15px rgba(darken($body-bg, 25%),0.06);
 $widget-shadow-designated: -1px 0 8px rgba(0,0,0,.2);

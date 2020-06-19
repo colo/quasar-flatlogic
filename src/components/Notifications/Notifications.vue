@@ -65,3 +65,5 @@ export default {
   },
 }
 </script>
+
+<style src="./Notifications.scss" lang="scss" />

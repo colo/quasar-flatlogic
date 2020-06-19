@@ -12,3 +12,5 @@ export default {
   }
 }
 </script>
+
+<style src="./Loader.scss" lang="scss"/>

@@ -64,3 +64,5 @@ export default {
   },
 }
 </script>
+
+<style src="./BigStat.scss" lang="scss" scoped />

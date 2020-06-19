@@ -268,3 +268,5 @@ export default {
   }
 }
 </script>
+
+<style src="./Dashboard.scss" lang="scss" />

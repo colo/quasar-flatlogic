@@ -5,8 +5,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // import 'src/assets/sing-app/css/app.css'
 // import 'src/assets/sing-app/css/chunk-vendors.css'
-import 'src/assets/light-blue/css/app.css'
-import 'src/assets/light-blue/css/chunk-vendors.css'
+// import 'src/assets/light-blue/css/app.css'
+// import 'src/assets/light-blue/css/chunk-vendors.css'
 
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueTouch from 'vue-touch'

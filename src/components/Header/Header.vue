@@ -115,3 +115,5 @@ export default {
   }
 }
 </script>
+
+<style src="./Header.scss" lang="scss"></style>

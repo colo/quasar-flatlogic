@@ -66,3 +66,5 @@ export default {
   }
 }
 </script>
+
+<style src="./MainLayout.scss" lang="scss" />
