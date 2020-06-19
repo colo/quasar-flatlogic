@@ -1,4 +1,4 @@
-import config from '@etc/config'
+import config from '@etc/flatlogic.config'
 
 export default {
   data: () => {

@@ -2,7 +2,7 @@
   <li v-if="!childrenLinks && isHeader" :class="{headerLink: true, className}">
     <router-link :to="link" class="sidebar-link">
       <span class="icon">
-        <i :class="fullIconName"></i>
+        <i :class="iconName"></i>
       </span>
       {{header}} <sup v-if="label" :class="'text-' + labelColor" class="headerLabel">{{label}}</sup>
       <b-badge v-if="badge" variant="primary" pill>{{badge}}</b-badge>
@@ -12,7 +12,7 @@
     <!-- <div> -->
       <router-link :to="link" event="" class="d-flex sidebar-link">
         <span class="icon">
-          <i :class="fullIconName"></i>
+          <i :class="iconName"></i>
         </span>
         {{header}} <sup v-if="label" :class="'text-' + labelColor" class="ml-1 headerLabel">{{label}}</sup>
         <div :class="{caretWrapper: true, carretActive: isActive}" @click="() => togglePanelCollapse(link)">
@@ -84,9 +84,9 @@ export default {
     },
   },
   computed: {
-    fullIconName () {
-      return `fi ${this.iconName}`
-    },
+    // fullIconName () {
+    //   return `fi ${this.iconName}`
+    // },
     isActive () {
       debug('isActive', this.activeItem, this.index)
       return (this.activeItem &&

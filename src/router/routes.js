@@ -18,7 +18,7 @@ const routes = [
         path: 'dashboard',
         component: () => import(/* webpackChunkName: "dashboard" */ 'pages/Dashboard/Dashboard'),
         meta: {
-          breadcrumb: { label: 'Dashboard', icon: 'flaticon-home', navbar: true }
+          breadcrumb: { label: 'Dashboard', icon: 'fi flaticon-home', navbar: true }
         },
       },
       {
@@ -28,7 +28,7 @@ const routes = [
         redirect: { name: 'system_hosts' },
 
         meta: {
-          breadcrumb: { label: 'System', icon: 'flaticon-server', navbar: true }
+          breadcrumb: { label: 'System', icon: 'fi flaticon-server', navbar: true }
         },
         children: [
           {
@@ -79,7 +79,7 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         // component: () => import(/* webpackChunkName: "logs" */ 'pages/Dashboard/Dashboard'),
         meta: {
-          breadcrumb: { label: 'Logs', icon: 'flaticon-log', navbar: true }
+          breadcrumb: { label: 'Logs', icon: 'fa fa-file-text-o', navbar: true }
         },
 
         children: [
@@ -149,6 +149,94 @@ const routes = [
           }
 
         ]
+      },
+      {
+        name: 'munin',
+        path: 'munin',
+        // component: () => import(/* webpackChunkName: "munin" */ 'pages/Dashboard/Dashboard'),
+        redirect: { name: 'munin_hosts' },
+
+        meta: {
+          breadcrumb: { label: 'Munin', icon: 'fa fa-bar-chart-o', navbar: true }
+        },
+        children: [
+          {
+            path: 'hosts',
+            name: 'munin_hosts',
+            component: () => import(/* webpackChunkName: "munin.hosts" */ 'pages/Dashboard/Dashboard'),
+            meta: {
+              breadcrumb: { label: 'Hosts', icon: 'widgets', navbar: true }
+            },
+            children: [
+              {
+                path: ':host',
+                name: 'munin_host',
+                component: () => import(/* webpackChunkName: "munin.host" */ 'pages/Dashboard/Dashboard'),
+                meta: {
+                  breadcrumb: { label: 'Host', icon: 'widgets' }
+                }
+              }
+            ]
+          },
+          {
+            path: 'categories',
+            name: 'munin_categories',
+            component: () => import(/* webpackChunkName: "munin.hosts" */ 'pages/Dashboard/Dashboard'),
+            meta: {
+              breadcrumb: { label: 'Categories', icon: 'widgets', navbar: true }
+            },
+            children: [
+              {
+                path: ':category',
+                name: 'munin_category',
+                component: () => import(/* webpackChunkName: "munin.category" */ 'pages/Dashboard/Dashboard'),
+                meta: {
+                  breadcrumb: { label: 'Category', icon: 'widgets', app: 'munin' }
+                }
+              }
+            ]
+          }
+
+        ]
+      },
+      {
+        path: '/vhosts',
+        name: 'vhosts',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "vhosts" */ '@apps/vhosts/index.vue'),
+        // component: () => import(/* webpackChunkName: "vhosts" */ 'pages/Dashboard/Dashboard'),
+        meta: {
+          breadcrumb: { label: 'Vhosts', icon: 'glyphicon glyphicon-link', navbar: true }
+        }
+
+      },
+      {
+        path: '/checks',
+        name: 'checks',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        // component: () => import(/* webpackChunkName: "checks" */ '@apps/checks/index.vue'),
+        component: () => import(/* webpackChunkName: "checks" */ 'pages/Dashboard/Dashboard'),
+        meta: {
+          breadcrumb: { label: 'Checks', icon: 'fa fa-check', navbar: true }
+        }
+
+      },
+      {
+        path: '/alerts',
+        name: 'alerts',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        // component: () => import(/* webpackChunkName: "alerts" */ '@apps/alerts/index.vue'),
+        component: () => import(/* webpackChunkName: "alerts" */ 'pages/Dashboard/Dashboard'),
+        meta: {
+          breadcrumb: { label: 'Alerts', icon: 'fa fa-fire', navbar: true }
+        }
+
       },
     ]
   }
