@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import layout from './layout'
-// import example from './module-example'
+
+import layout from './flatlogic/layout'
+import app from './app'
+import grids from './grids'
+import components from './components'
 
 Vue.use(Vuex)
 
@@ -17,7 +20,10 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      layout
+      layout,
+      app,
+      grids,
+      components
     },
 
     // enable strict mode (adds overhead!)

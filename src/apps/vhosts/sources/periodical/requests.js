@@ -1,5 +1,5 @@
 import * as Debug from 'debug'
-const debug = Debug('apps:vhosts:sources:requests')
+const debug = Debug('apps:vhosts:periodical:sources:requests')
 
 const nginx_vhosts_enabled = {
   params: {

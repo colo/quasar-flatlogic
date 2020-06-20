@@ -1,5 +1,5 @@
 import * as Debug from 'debug'
-const debug = Debug('apps:vhosts:sources:store')
+const debug = Debug('apps:vhosts:periodical:sources:store')
 
 const nginx_vhosts_enabled = {
   params: {
@@ -21,7 +21,7 @@ const nginx_vhosts_enabled = {
 }
 
 const store = [
-  nginx_vhosts_enabled
+  // nginx_vhosts_enabled
 ]
 
 // export { periodical, once, nginx_vhosts_error }

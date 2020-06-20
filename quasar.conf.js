@@ -25,6 +25,7 @@ module.exports = function (/* ctx */) {
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'bootstrap',
+      'vue-observe-visibility',
       'i18n',
       'axios'
     ],
