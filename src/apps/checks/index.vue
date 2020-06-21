@@ -109,10 +109,11 @@
                   <b-button variant="link" @click="props.expand = !props.expand">
                     <i :class="props.expand ? 'fa fa-sort-asc' : 'fa fa-sort-desc'"></i>
                   </b-button>
-                  {{ props.row.hostname || props.row.uri}}
+                  {{ props.row.uri || props.row.hostname}}
                   <!-- <q-space /> -->
                   <!-- <q-btn type="a" v-if="/^http/.test(props.row.protocol)" :href="props.row.protocol+'//'+props.row.hostname+':'+props.row.port" target="_blank" flat icon="open_in_new" /> -->
-                  <b-button variant="link" v-if="/^http/.test(props.row.protocol)" :href="props.row.protocol+'//'+props.row.hostname+':'+props.row.port" target="_blank">
+                  <b-button variant="link" v-if="/^http/.test(props.row.protocol)" :href="props.row.protocol+'//'+props.row.hostname" target="_blank">
+                    <!-- +':'+props.row.port -->
                     <i class="fa fa-external-link"></i>
                   </b-button>
                 </q-td>
