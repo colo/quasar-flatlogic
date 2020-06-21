@@ -32,7 +32,7 @@ const nginx_vhosts_enabled = {
       vm.vhosts = _vhosts
       vm.loading = false
     }
-    debug('All callback', _vhosts)
+    // debug('All callback', _vhosts)
   }
 }
 

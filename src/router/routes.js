@@ -206,7 +206,6 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "vhosts" */ '@apps/vhosts/index.vue'),
-        // component: () => import(/* webpackChunkName: "vhosts" */ 'pages/Dashboard/Dashboard'),
         meta: {
           breadcrumb: { label: 'Vhosts', icon: 'glyphicon glyphicon-link', navbar: true }
         }
@@ -218,8 +217,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        // component: () => import(/* webpackChunkName: "checks" */ '@apps/checks/index.vue'),
-        component: () => import(/* webpackChunkName: "checks" */ 'pages/Dashboard/Dashboard'),
+        component: () => import(/* webpackChunkName: "checks" */ '@apps/checks/index.vue'),
         meta: {
           breadcrumb: { label: 'Checks', icon: 'fa fa-check', navbar: true }
         }
