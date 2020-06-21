@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-page">
-    <h1 class="page-title">Checks</h1>
+    <h1 class="page-title">Alerts</h1>
     <b-row>
         <b-col xs="12">
           <Widget
@@ -11,7 +11,7 @@
             <q-table
               flat
               :table-class="'my-sticky-header-table'"
-              title="Vhosts"
+              title="Alerts"
               :data="alerts"
               :columns="columns"
               :row-key="row => row.host +'.'+ row.alert+'.'+ row.path +'.'+ row.timestamp"
@@ -257,7 +257,7 @@ export default {
   },
   computed: {
     pagesNumber () {
-      return Math.ceil(this.checks.length / this.pagination.rowsPerPage)
+      return Math.ceil(this.alerts.length / this.pagination.rowsPerPage)
     }
   },
   methods: {
