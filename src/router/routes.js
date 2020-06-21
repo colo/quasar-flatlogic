@@ -229,8 +229,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        // component: () => import(/* webpackChunkName: "alerts" */ '@apps/alerts/index.vue'),
-        component: () => import(/* webpackChunkName: "alerts" */ 'pages/Dashboard/Dashboard'),
+        component: () => import(/* webpackChunkName: "alerts" */ '@apps/alerts/index.vue'),
         meta: {
           breadcrumb: { label: 'Alerts', icon: 'fa fa-fire', navbar: true }
         }

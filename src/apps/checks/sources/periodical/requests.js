@@ -23,7 +23,7 @@ const checks_range = {
       source = [{
         params: { id: _key },
         path: 'all',
-        range: 'posix ' + (Date.now() - HOUR) + '-' + Date.now() + '/*', // (5 * MINUTE)
+        range: 'posix ' + (Date.now() - (5 * MINUTE)) + '-' + Date.now() + '/*', // (5 * MINUTE)
         query: {
           'from': 'educativa',
           'index': false,
