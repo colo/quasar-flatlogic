@@ -409,13 +409,13 @@
         </q-tab-panels>
 
         <q-table
-          class="my-sticky-header-table"
+          flat
+          :table-class="'my-sticky-header-table'"
           title="Web Logs"
           :data="periodical.logs"
           :columns="columns"
           :row-key="(row, index) => row.timestamp + row.domain +'.'+ row.host +'.'+ row.path + '.' + index"
           :pagination.sync="pagination"
-          virtual-scroll
           :rows-per-page-options="[0]"
           :visible-columns="($q.screen.lt.sm) ? visibleColumns : allColumns"
           :loading="loading_logs"
@@ -423,6 +423,48 @@
         >
         <!-- dark
         color="amber" -->
+          <template v-slot:pagination="scope">
+            <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
+             <b-button-group class="mx-1" size="sm">
+               <b-button
+                 v-if="scope.pagesNumber > 2"
+                 :disabled="scope.isFirstPage"
+                 @click="scope.firstPage"
+               >
+                 <i class="fa fa-step-backward"></i>
+               </b-button>
+
+               <b-button
+                 v-if="scope.pagesNumber > 2"
+                 :disabled="scope.isFirstPage"
+                 @click="scope.prevPage"
+               >
+                 <i class="fa fa-backward"></i>
+               </b-button>
+             </b-button-group>
+             <b-dropdown class="mx-1" right text="Records per page">
+               <b-dropdown-item @click="pagination.rowsPerPage = 20">20</b-dropdown-item>
+               <b-dropdown-item @click="pagination.rowsPerPage = 50">50</b-dropdown-item>
+               <b-dropdown-item @click="pagination.rowsPerPage = 100">100</b-dropdown-item>
+             </b-dropdown>
+             <b-button-group class="mx-1" size="sm">
+               <b-button
+               :disabled="scope.isLastPage"
+               @click="scope.nextPage"
+               >
+                 <i class="fa fa-forward"></i>
+               </b-button>
+
+               <b-button
+               v-if="pagesNumber > 2"
+               :disabled="scope.isLastPage"
+               @click="scope.lastPage"
+               >
+                 <i class="fa fa-step-forward"></i>
+               </b-button>
+             </b-button-group>
+           </b-button-toolbar>
+          </template>
           <template v-slot:top="props">
             <q-select
               v-if="$q.screen.lt.sm"
@@ -473,21 +515,58 @@
             </q-td>
 
             <q-td key="domain" :props="props">
-              {{ props.row.domain }}
               <!-- <q-btn type="a" :href="props.row.schema+'://'+props.row.uri+':'+props.row.port" target="_blank" flat icon="open_in_new" /> -->
-              <q-btn v-on:click="destroy_pipelines()" :to="'/logs/web/filter/?domain=' + props.row.domain" flat icon="open_in_new" />
+              <b-button
+                variant="outline"
+                @click="destroy_pipelines()"
+                :to="'/logs/web/filter/?domain=' + props.row.domain"
+              >
+                {{ props.row.domain }}
+                <q-icon name="open_in_browser" />
+              </b-button>
+              <!-- <q-btn
+                v-on:click="destroy_pipelines()"
+                :to="'/logs/web/filter/?domain=' + props.row.domain"
+                flat
+                icon="open_in_browser"
+                :label="props.row.domain"
+              /> -->
             </q-td>
 
             <q-td key="host" :props="props">
-              {{ props.row.host }}
-
-              <q-btn v-on:click="destroy_pipelines()" :to="'/logs/web/filter/?host=' + props.row.host" flat icon="open_in_new" />
+              <b-button
+                variant="outline"
+                @click="destroy_pipelines()"
+                :to="'/logs/web/filter/?host=' + props.row.host"
+              >
+                {{ props.row.host }}
+                <q-icon name="open_in_browser" />
+              </b-button>
+              <!-- <q-btn
+                v-on:click="destroy_pipelines()"
+                :to="'/logs/web/filter/?host=' + props.row.host"
+                flat
+                icon="open_in_browser"
+                :label="props.row.host"
+              /> -->
             </q-td>
 
             <q-td key="path" :props="props">
-              {{ props.row.path }}
-
-              <q-btn v-on:click="destroy_pipelines()" :to="'/logs/web/filter/?path=' + props.row.path" flat icon="open_in_new" />
+              <b-button
+                variant="outline"
+                @click="destroy_pipelines()"
+                :to="'/logs/web/filter/?path=' + props.row.path"
+              >
+                {{ props.row.path }}
+                <q-icon name="open_in_browser" />
+              </b-button>
+              <!-- <q-btn
+                v-on:click="destroy_pipelines()"
+                :to="'/logs/web/filter/?path=' + props.row.path"
+                flat
+                icon="open_in_browser"
+                :label="props.row.path"
+              /> -->
             </q-td>
           </q-tr>
           </template>
