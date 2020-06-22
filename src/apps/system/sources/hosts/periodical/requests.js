@@ -143,7 +143,7 @@ const hosts_range_component = {
           source = [{
             params: { id: _key },
             path: 'all',
-            range: 'posix ' + roundMilliseconds((Date.now() - (5 * SECOND))) + '-' + roundMilliseconds(Date.now()) + '/*',
+            range: 'posix ' + roundMilliseconds(Date.now() - (3 * SECOND)) + '-' + roundMilliseconds(Date.now() - SECOND) + '/*',
             query: {
               'from': 'os',
               // 'register': 'changes',

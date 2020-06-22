@@ -52,7 +52,7 @@ export default {
         connect_retry_count: -1,
         connect_retry_periodical: 1000,
         requests: {
-          periodical: 500
+          periodical: 1000
         }
       }
     }
