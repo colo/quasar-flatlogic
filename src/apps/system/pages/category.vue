@@ -2,18 +2,22 @@
   <div>
     <template v-for="(host) in plugins_hosts">
       <a :id="host" :key="host+'.anchor'"/>
-      <q-card :key="host">
-        <q-card-section>
+      <Widget
+        :key="$route.path +'.'+ JSON.stringify($route.query)+'.host.'+host"
+      >
+      <!-- <q-card :key="host">
+        <q-card-section> -->
           <div class="text-h3">{{host}}</div>
-        </q-card-section>
+        <!-- </q-card-section> -->
 
-        <q-card-section>
+        <!-- <q-card-section> -->
           <template v-for="(name) in plugins">
             <system-plugin-dygraph v-if="name.indexOf(host) > -1" :ref="name" :id="name" :name="name"  :key="name+'.plugin'"/>
           </template>
-        </q-card-section>
+        <!-- </q-card-section> -->
         <!-- <q-separator dark /> -->
-      </q-card>
+      <!-- </q-card> -->
+      </Widget>
     </template>
   </div>
 </template>

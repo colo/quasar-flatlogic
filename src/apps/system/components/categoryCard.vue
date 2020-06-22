@@ -1,37 +1,36 @@
 <template>
-  <q-card>
-    <q-card-section class="bg-primary">
-      <q-btn
-        flat
-        :to="{
-          name: 'system_category',
-          params: { category: category },
-        }"
-      >
-      {{category}}
-    </q-btn>
+  <Widget
+  >
 
-    </q-card-section>
-
-    <!-- <q-card-section>
-      {{ lorem }}
-    </q-card-section> -->
-
-    <q-separator dark />
-
-    <q-card-actions>
-      <q-btn
-        v-for="host in hosts"
-        :key="category+'.'+host"
-        flat
-        :to="{
-          name: 'system_category',
-          params: { category: category },
-          hash: '#'+host
-        }"
-      >{{host}}</q-btn>
-    </q-card-actions>
-  </q-card>
+    <b-button-toolbar key-nav aria-label="Toolbar with button groups" :justified="true">
+      <b-button-group class="mx-1">
+        <b-button
+          variant="primary"
+          :to="{
+            name: 'system_category',
+            params: { category: category },
+          }"
+        >
+          {{category}}
+        </b-button>
+      </b-button-group>
+      <b-button-group class="mx-1" size="sm">
+        <b-button
+          variant="outline-info"
+          v-for="host in hosts"
+          :key="category+'.'+host"
+          :href="'/system/categories/'+category+'#'+host"
+        >
+        <!-- :to="{
+          name: 'system_host',
+          params: { host: host },
+          hash: '#'+category
+        }" -->
+          {{host}}
+        </b-button>
+      </b-button-group>
+    </b-button-toolbar>
+  </Widget>
 
 </template>
 

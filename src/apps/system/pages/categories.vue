@@ -1,72 +1,31 @@
 <template>
-  <q-page>
-    <div class="q-pa-md">
-      <div class="bg-primary text-white">
-        <q-toolbar >
-          <q-breadcrumbs active-color="white" style="font-size: 16px">
-            <q-breadcrumbs-el label="Home" icon="home" to="/"/>
-            <q-breadcrumbs-el label="System" :to="{name : 'system'}"/>
-            <q-breadcrumbs-el label="Categories" v-bind="(!category) ? {'disabled' : true} : ''" :to="{name : 'system_categories'}"/>
-            <q-breadcrumbs-el :label="category" v-if="category" />
-          </q-breadcrumbs>
-        </q-toolbar>
-        <q-toolbar>
-          <!-- <q-btn flat round dense icon="assignment_ind"/> -->
-          <!-- <q-toolbar-title>Quasar</q-toolbar-title> -->
+  <div class="dashboard-page">
+    <h1 class="page-title">System</h1>
+    <b-row>
+      <b-col xs="12">
+        <template v-for="(category_hosts, category_name) in categories_paths">
+          <system-category-card
+            :key="category_name"
+            v-if="!category || category_name === category"
+            :hosts="category_hosts"
+            :category="category_name"
+          />
+        </template>
 
-          <q-btn flat class="q-mr-xs" label="Hosts" :to="{name : 'system_hosts'}"/>
-          <q-btn flat class="q-mr-xs" label="Categories" :to="{name : 'system_categories'}"/>
-          <!-- <q-btn flat round dense icon="gamepad"/> -->
-        </q-toolbar>
-      </div>
+        <router-view :key="$route.path +'.'+ JSON.stringify($route.query)"></router-view>
 
-      <template v-for="(category_hosts, category_name) in categories_paths">
-        <system-category-card
-          :key="category_name"
-          v-if="!category || category_name === category"
-          :hosts="category_hosts"
-          :category="category_name"
-        />
-      </template>
+        <template v-for="(category_hosts, category_name) in categories_paths">
+          <system-category-card
+            :key="category_name+'.bottom'"
+            v-if="category_name === category"
+            :hosts="category_hosts"
+            :category="category_name"
+          />
+        </template>
 
-      <router-view :key="$route.path +'.'+ JSON.stringify($route.query)"></router-view>
-
-      <template v-for="(category_hosts, category_name) in categories_paths">
-        <system-category-card
-          :key="category_name+'.bottom'"
-          v-if="category_name === category"
-          :hosts="category_hosts"
-          :category="category_name"
-        />
-      </template>
-    </div>
-
-    <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]" :duration="50">
-      <q-btn fab icon="keyboard_arrow_up" color="primary" />
-    </q-page-scroller>
-    <!-- v-if="!category || category_name === category" -->
-
-     <!-- :key="$route.fullPath" -->
-    <!-- <vk-card class="uk-background-secondary uk-light" v-for="(categories, category) in categories_paths" :key="category">
-
-      <vk-card-title>
-        <router-link :to="'/system/categories/'+category" v-slot="{ href, route, navigate, isActive, isExactActive }"
-        >
-          <h3 class="uk-light"><a class="uk-link-heading" :href="href" @click="navigate">{{category}}</a></h3>
-        </router-link>
-
-      </vk-card-title>
-
-      <ul class="uk-subnav uk-subnav-divider" uk-margin>
-        <li v-for="category in categories" :key="category+'.'+category">
-          <router-link :to="'/system/categories/'+category+'#'+category" v-slot="{ href, route, navigate, isActive, isExactActive }"
-          >
-            <a :href="href" @click="navigate">{{category}}</a>
-          </router-link>
-        </li>
-      </ul>
-    </vk-card> -->
-  </q-page>
+      </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script>

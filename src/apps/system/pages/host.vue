@@ -1,6 +1,212 @@
 <template>
+
   <div class="q-pa-md">
-    <q-tabs
+    <b-card no-body>
+      <b-tabs pills card lazy>
+        <b-tab title="Now" no-body active>
+          <q-toolbar class="text-primary">
+            <!-- <q-btn flat round dense icon="menu" /> -->
+            <q-toolbar-title>
+              From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}
+            </q-toolbar-title>
+            <!-- <q-space class="text-primary"/> -->
+
+          </q-toolbar>
+          <template v-for="(category) in periodical.plugins_categories">
+            <!-- {{category}} -->
+            <!-- <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.'+category"> -->
+            <Widget
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.'+category"
+            >
+              <a :id="category"/>
+              <!-- <q-card-section> -->
+                <div class="text-h3">{{category}}</div>
+              <!-- </q-card-section> -->
+
+              <!-- <q-card-section> -->
+                <template v-for="(name) in periodical.plugins">
+                  <!-- {{name}} -->
+                  <system-plugin-dygraph
+                    v-if="name.indexOf(category) > -1"
+                    :ref="name+'.periodical'"
+                    :id="'os.'+name+'.periodical'"
+                    :name="name"
+                    :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical'+name+'.plugin'"
+                  />
+                  <!-- :interval="1" -->
+                </template>
+              <!-- </q-card-section> -->
+            </Widget>
+            <!-- </q-card> -->
+          </template>
+        </b-tab>
+        <b-tab title="Minute" no-body>
+          <q-toolbar class="text-primary">
+            <!-- <q-btn flat round dense icon="menu" /> -->
+            <q-toolbar-title>
+              From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}
+            </q-toolbar-title>
+            <!-- <q-space class="text-primary"/> -->
+            <template>
+              <div class="q-pa-md">
+                <q-btn flat dense icon="access_time" />
+                <q-popup-proxy v-model="showMinute" ref="qMinuteProxy" transition-show="scale" transition-hide="scale">
+                    <q-time
+                      v-model="selected_minute"
+                      :options="disabled_minutes"
+                      now-btn
+                      />
+                </q-popup-proxy>
+
+              </div>
+            </template>
+          </q-toolbar>
+          <template v-for="(category) in minute.plugins_categories">
+            <!-- {{category}} -->
+            <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute.'+category">
+              <a :id="category"/>
+              <q-card-section>
+                <div class="text-h3">{{category}}</div>
+              </q-card-section>
+
+              <q-card-section>
+                <template v-for="(name) in minute.plugins">
+                  <!-- {{name}} -->
+                  <system-plugin-dygraph
+                    v-if="name.indexOf(category) > -1"
+                    :ref="name+'.minute'"
+                    :id="'os.'+name+'.minute'"
+                    :name="name"
+                    :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute.'+name+'.plugin'"
+                    :stat="{
+                      data: [],
+                      length: $options.minute.length,
+                      range: undefined,
+                    }"
+                    :dygraph="$options.minute.dygraph"
+                    :interval="$options.minute.interval"
+                  />
+                </template>
+              </q-card-section>
+
+              <!-- <q-separator dark /> -->
+            </q-card>
+          </template>
+        </b-tab>
+        <b-tab title="Hourly" no-body>
+          <q-toolbar class="text-primary">
+            <!-- <q-btn flat round dense icon="menu" /> -->
+            <q-toolbar-title>
+              From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}
+            </q-toolbar-title>
+            <!-- <q-space class="text-primary"/> -->
+            <template>
+              <div class="q-pa-md">
+
+                <q-btn flat dense icon="access_time" />
+                <q-popup-proxy v-model="showHour" ref="qHourProxy" transition-show="scale" transition-hide="scale">
+                    <q-time
+                      v-model="selected_hour"
+                      :options="disabled_hours"
+                      now-btn
+                      />
+                </q-popup-proxy>
+
+              </div>
+            </template>
+          </q-toolbar>
+          <template v-for="(category) in hour.plugins_categories">
+            <!-- {{category}} -->
+            <Widget
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour.'+category"
+            >
+            <!-- <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour.'+category"> -->
+              <a :id="category"/>
+              <!-- <q-card-section> -->
+                <div class="text-h3">{{category}}</div>
+              <!-- </q-card-section> -->
+
+              <!-- <q-card-section> -->
+                <template v-for="(name) in hour.plugins">
+                  <!-- {{name}} -->
+                  <system-plugin-dygraph
+                    v-if="name.indexOf(category) > -1"
+                    :ref="name+'.hour'"
+                    :id="'os.'+name+'.hour'"
+                    :name="name"
+                    :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour.'+name+'.plugin'"
+                    :stat="{
+                      data: [],
+                      length: $options.hour.length,
+                      range: undefined,
+                    }"
+                    :dygraph="$options.hour.dygraph"
+                    :interval="$options.hour.interval"
+                  />
+                </template>
+              <!-- </q-card-section> -->
+
+              <!-- <q-separator dark /> -->
+            <!-- </q-card> -->
+            </Widget>
+          </template>
+        </b-tab>
+        <b-tab title="Daily" no-body>
+          <q-toolbar class="text-primary">
+          <!-- <q-btn flat round dense icon="menu" /> -->
+          <q-toolbar-title>
+            From: {{ format_time(day.range.start) }} - To: {{ format_time(day.range.end) }} / Updated on: {{ format_time(day.timestamp) }}
+          </q-toolbar-title>
+          <!-- <q-space class="text-primary"/> -->
+          <template>
+            <div class="q-pa-md">
+              <q-btn flat dense icon="calendar_today" />
+              <q-popup-proxy v-model="showCalendar" ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                  <q-date v-model="selected_day" :options="disabled_days" minimal/>
+              </q-popup-proxy>
+
+            </div>
+          </template>
+        </q-toolbar>
+        <template v-for="(category) in day.plugins_categories">
+          <!-- {{category}} -->
+          <Widget
+            :key="$route.path +'.'+ JSON.stringify($route.query)+'.day.'+category"
+          >
+          <!-- <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.day.'+category"> -->
+            <a :id="category" />
+            <!-- <q-card-section> -->
+              <div class="text-h3">{{category}}</div>
+            <!-- </q-card-section> -->
+
+            <!-- <q-card-section> -->
+              <template v-for="(name) in day.plugins">
+                <!-- {{name}} -->
+                <system-plugin-dygraph
+                  v-if="name.indexOf(category) > -1"
+                  :ref="name+'.day'"
+                  :id="'os.'+name+'.day'"
+                  :name="name"
+                  :key="$route.path +'.'+ JSON.stringify($route.query)+'.day.'+name+'.plugin'"
+                  :stat="{
+                    data: [],
+                    length: $options.day.length,
+                    range: undefined,
+                  }"
+                  :dygraph="$options.day.dygraph"
+                  :interval="$options.day.interval"
+                />
+              </template>
+            <!-- </q-card-section> -->
+
+            <!-- <q-separator dark /> -->
+          <!-- </q-card> -->
+          </Widget>
+        </template>
+        </b-tab>
+      </b-tabs>
+    </b-card>
+    <!-- <q-tabs
       v-model="range_tab"
       dense
       class="text-grey"
@@ -16,207 +222,19 @@
     </q-tabs>
     <q-separator />
     <q-tab-panels v-model="range_tab">
-      <!-- animated -->
       <q-tab-panel name="periodical" :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical'">
-        <!-- <div class="text-h6">From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}</div> -->
-        <q-toolbar class="text-primary">
-          <!-- <q-btn flat round dense icon="menu" /> -->
-          <q-toolbar-title>
-            From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}
-          </q-toolbar-title>
-          <!-- <q-space class="text-primary"/> -->
-
-        </q-toolbar>
-        <template v-for="(category) in periodical.plugins_categories">
-          <!-- {{category}} -->
-          <!-- <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.'+category"> -->
-          <Widget
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.'+category"
-          >
-            <a :id="category"/>
-            <!-- <q-card-section> -->
-              <div class="text-h3">{{category}}</div>
-            <!-- </q-card-section> -->
-
-            <!-- <q-card-section> -->
-              <template v-for="(name) in periodical.plugins">
-                <!-- {{name}} -->
-                <system-plugin-dygraph
-                  v-if="name.indexOf(category) > -1"
-                  :ref="name+'.periodical'"
-                  :id="'os.'+name+'.periodical'"
-                  :name="name"
-                  :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical'+name+'.plugin'"
-                />
-                <!-- :interval="1" -->
-              </template>
-            <!-- </q-card-section> -->
-          </Widget>
-          <!-- </q-card> -->
-        </template>
       </q-tab-panel>
 
       <q-tab-panel name="minute" :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute'">
-        <!-- <div class="text-h6">From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}</div> -->
-        <q-toolbar class="text-primary">
-          <!-- <q-btn flat round dense icon="menu" /> -->
-          <q-toolbar-title>
-            From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}
-          </q-toolbar-title>
-          <!-- <q-space class="text-primary"/> -->
-          <template>
-            <div class="q-pa-md">
-              <q-btn flat dense icon="access_time" />
-              <q-popup-proxy v-model="showMinute" ref="qMinuteProxy" transition-show="scale" transition-hide="scale">
-                  <q-time
-                    v-model="selected_minute"
-                    :options="disabled_minutes"
-                    now-btn
-                    />
-              </q-popup-proxy>
-
-            </div>
-          </template>
-        </q-toolbar>
-        <template v-for="(category) in minute.plugins_categories">
-          <!-- {{category}} -->
-          <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute.'+category">
-            <a :id="category"/>
-            <q-card-section>
-              <div class="text-h3">{{category}}</div>
-            </q-card-section>
-
-            <q-card-section>
-              <template v-for="(name) in minute.plugins">
-                <!-- {{name}} -->
-                <system-plugin-dygraph
-                  v-if="name.indexOf(category) > -1"
-                  :ref="name+'.minute'"
-                  :id="'os.'+name+'.minute'"
-                  :name="name"
-                  :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute.'+name+'.plugin'"
-                  :stat="{
-                    data: [],
-                    length: $options.minute.length,
-                    range: undefined,
-                  }"
-                  :dygraph="$options.minute.dygraph"
-                  :interval="$options.minute.interval"
-                />
-              </template>
-            </q-card-section>
-
-            <!-- <q-separator dark /> -->
-          </q-card>
-        </template>
       </q-tab-panel>
 
       <q-tab-panel name="hour" :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour'">
-        <!-- <div class="text-h6">From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}</div> -->
-        <q-toolbar class="text-primary">
-          <!-- <q-btn flat round dense icon="menu" /> -->
-          <q-toolbar-title>
-            From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}
-          </q-toolbar-title>
-          <!-- <q-space class="text-primary"/> -->
-          <template>
-            <div class="q-pa-md">
-
-              <q-btn flat dense icon="access_time" />
-              <q-popup-proxy v-model="showHour" ref="qHourProxy" transition-show="scale" transition-hide="scale">
-                  <q-time
-                    v-model="selected_hour"
-                    :options="disabled_hours"
-                    now-btn
-                    />
-              </q-popup-proxy>
-
-            </div>
-          </template>
-        </q-toolbar>
-        <template v-for="(category) in hour.plugins_categories">
-          <!-- {{category}} -->
-          <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour.'+category">
-            <a :id="category"/>
-            <q-card-section>
-              <div class="text-h3">{{category}}</div>
-            </q-card-section>
-
-            <q-card-section>
-              <template v-for="(name) in hour.plugins">
-                <!-- {{name}} -->
-                <system-plugin-dygraph
-                  v-if="name.indexOf(category) > -1"
-                  :ref="name+'.hour'"
-                  :id="'os.'+name+'.hour'"
-                  :name="name"
-                  :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour.'+name+'.plugin'"
-                  :stat="{
-                    data: [],
-                    length: $options.hour.length,
-                    range: undefined,
-                  }"
-                  :dygraph="$options.hour.dygraph"
-                  :interval="$options.hour.interval"
-                />
-              </template>
-            </q-card-section>
-
-            <!-- <q-separator dark /> -->
-          </q-card>
-        </template>
       </q-tab-panel>
 
       <q-tab-panel name="day" :key="$route.path +'.'+ JSON.stringify($route.query)+'.day'">
-        <q-toolbar class="text-primary">
-        <!-- <q-btn flat round dense icon="menu" /> -->
-        <q-toolbar-title>
-          From: {{ format_time(day.range.start) }} - To: {{ format_time(day.range.end) }} / Updated on: {{ format_time(day.timestamp) }}
-        </q-toolbar-title>
-        <!-- <q-space class="text-primary"/> -->
-        <template>
-          <div class="q-pa-md">
-            <q-btn flat dense icon="calendar_today" />
-            <q-popup-proxy v-model="showCalendar" ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <q-date v-model="selected_day" :options="disabled_days" minimal/>
-            </q-popup-proxy>
 
-          </div>
-        </template>
-      </q-toolbar>
-      <template v-for="(category) in day.plugins_categories">
-        <!-- {{category}} -->
-        <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour.'+category">
-          <a :id="category" />
-          <q-card-section>
-            <div class="text-h3">{{category}}</div>
-          </q-card-section>
-
-          <q-card-section>
-            <template v-for="(name) in day.plugins">
-              <!-- {{name}} -->
-              <system-plugin-dygraph
-                v-if="name.indexOf(category) > -1"
-                :ref="name+'.day'"
-                :id="'os.'+name+'.day'"
-                :name="name"
-                :key="$route.path +'.'+ JSON.stringify($route.query)+'.day.'+name+'.plugin'"
-                :stat="{
-                  data: [],
-                  length: $options.day.length,
-                  range: undefined,
-                }"
-                :dygraph="$options.day.dygraph"
-                :interval="$options.day.interval"
-              />
-            </template>
-          </q-card-section>
-
-          <!-- <q-separator dark /> -->
-        </q-card>
-      </template>
       </q-tab-panel>
-    </q-tab-panels>
+    </q-tab-panels> -->
 
   </div>
 </template>
