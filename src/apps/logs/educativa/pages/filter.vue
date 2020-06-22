@@ -140,26 +140,12 @@
 
                   <q-btn flat dense icon="access_time" />
                   <q-popup-proxy v-model="showMinute" ref="qMinuteProxy" transition-show="scale" transition-hide="scale">
-                      <q-time
+                      <!-- <q-time
                         v-model="selected_minute"
                         :options="disabled_minutes"
                         now-btn
-                        />
-                        <!-- format24h -->
-                      <!-- @input="() => $refs.qDateProxy.hide()"  -->
-                    <!-- <q-calendar
-                      ref="calendar"
-                      v-model="selectedDate"
-                      view="month"
-                      locale="en-us"
-                      mini-mode
-                      :selected-start-end-dates="startEndDates"
-                      :day-class="classDay"
-                      @mousedown:day="onMouseDownDay"
-                      @mouseup:day="onMouseUpDay"
-                      @mousemove:day="onMouseMoveDay"
-                      :disabled-after="disabled_after()"
-                    /> -->
+                      /> -->
+                      <b-time v-model="selected_minute" locale="en" @context="onContext"></b-time>
                   </q-popup-proxy>
 
                 </div>
@@ -204,26 +190,12 @@
 
                   <q-btn flat dense icon="access_time" />
                   <q-popup-proxy v-model="showHour" ref="qHourProxy" transition-show="scale" transition-hide="scale">
-                      <q-time
+                      <!-- <q-time
                         v-model="selected_hour"
                         :options="disabled_hours"
                         now-btn
-                        />
-                        <!-- format24h -->
-                      <!-- @input="() => $refs.qDateProxy.hide()"  -->
-                    <!-- <q-calendar
-                      ref="calendar"
-                      v-model="selectedDate"
-                      view="month"
-                      locale="en-us"
-                      mini-mode
-                      :selected-start-end-dates="startEndDates"
-                      :day-class="classDay"
-                      @mousedown:day="onMouseDownDay"
-                      @mouseup:day="onMouseUpDay"
-                      @mousemove:day="onMouseMoveDay"
-                      :disabled-after="disabled_after()"
-                    /> -->
+                      /> -->
+                      <b-time v-model="selected_hour" :minutes-step="60" locale="en" @context="onContext"></b-time>
                   </q-popup-proxy>
 
                 </div>
@@ -261,35 +233,10 @@
             <!-- <q-space class="text-primary"/> -->
             <template>
               <div class="q-pa-md">
-                <!-- <q-btn name="calendar_roday" /> -->
-                  <!-- round -->
-                  <!-- <q-icon name="calendar_today" class="cursor-pointer q-ma-md"/> -->
-                  <!-- <q-input flat v-model="date" mask="date" :rules="['date']">
-                    <template v-slot:append>
-                      <q-icon name="event" class="cursor-pointer">
-                        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                          <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" :options="disabled_days" minimal/>
-                        </q-popup-proxy>
-                      </q-icon>
-                    </template>
-                  </q-input> -->
                   <q-btn flat dense icon="calendar_today" />
                   <q-popup-proxy v-model="showCalendar" ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="selected_day" :options="disabled_days" minimal/>
-                      <!-- @input="() => $refs.qDateProxy.hide()"  -->
-                    <!-- <q-calendar
-                      ref="calendar"
-                      v-model="selectedDate"
-                      view="month"
-                      locale="en-us"
-                      mini-mode
-                      :selected-start-end-dates="startEndDates"
-                      :day-class="classDay"
-                      @mousedown:day="onMouseDownDay"
-                      @mouseup:day="onMouseUpDay"
-                      @mousemove:day="onMouseMoveDay"
-                      :disabled-after="disabled_after()"
-                    /> -->
+                      <!-- <q-date v-model="selected_day" :options="disabled_days" minimal/> -->
+                      <b-calendar v-model="selected_day" @context="onContext" :max="disabled_max_days" locale="en-US"></b-calendar>
                   </q-popup-proxy>
 
               </div>
@@ -331,7 +278,7 @@
           :pagination.sync="pagination"
           :rows-per-page-options="[0]"
           :visible-columns="($q.screen.lt.sm) ? visibleColumns : allColumns"
-          :loading="loading"
+          :loading="loading_logs"
           :filter="search_filter"
           :key="$route.path +'.'+ JSON.stringify($route.query)+'.table'"
         >
@@ -781,6 +728,13 @@ export default {
   },
 
   computed: {
+    disabled_max_days: function () {
+      // return date <= moment().format('YYYY/MM/DD')
+      return moment().format('YYYY-MM-DD')// boostrap
+    },
+    pagesNumber () {
+      return Math.ceil(this.periodical.logs.length / this.pagination.rowsPerPage)
+    },
     'filter': function () {
       // return (this.$route && this.$route.params && this.$route.params.web) ? this.$route.params.web : undefined
       return (this.$route && this.$route.query)
@@ -904,6 +858,9 @@ export default {
 
   },
   methods: {
+    onContext (ctx) {
+      this.context = ctx
+    },
     end: function () {
       // if (this.current_day === undefined) {
       return Date.now()
