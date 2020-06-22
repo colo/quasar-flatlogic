@@ -9,18 +9,25 @@
     </router-link>
   </li>
   <li v-else-if="childrenLinks" :class="{headerLink: true, className}">
-    <div @click="() => togglePanelCollapse(link)">
-      <router-link :to="link" class="d-flex sidebar-link">
+    <!-- <div @click="() => togglePanelCollapse(link)"> -->
+      <router-link :to="link" class="d-flex sidebar-link" event="">
         <!-- event=""  -->
-        <span class="icon">
-          <i :class="iconName"></i>
-        </span>
-        {{header}} <sup v-if="label" :class="'text-' + labelColor" class="ml-1 headerLabel">{{label}}</sup>
+        <router-link :to="link" class="d-flex sidebar-link">
+          <span class="icon">
+            <i :class="iconName"></i>
+          </span>
+          {{header}} <sup v-if="label" :class="'text-' + labelColor" class="ml-1 headerLabel">{{label}}</sup>
+        </router-link>
         <div :class="{caretWrapper: true, carretActive: isActive}">
-          <i class="fa fa-angle-left" />
+          <!-- <i class="fa fa-angle-left" /> -->
+          <b-button
+            @click="() => togglePanelCollapse(link)"
+          >
+            <i class="fa fa-angle-left" />
+          </b-button>
         </div>
       </router-link>
-    </div>
+    <!-- </div> -->
     <b-collapse :id="'collapse' + index" :visible="isActive">
       <ul class="sub-menu">
         <NavLink v-for="link in childrenLinks"

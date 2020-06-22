@@ -1,559 +1,495 @@
 <template>
-  <q-page>
-     <!-- :key="$route.path +'.'+ JSON.stringify($route.query)+'.'+end()+'.page'" -->
-    <div class="q-pa-md">
-      <div class="bg-primary text-white">
-        <q-toolbar >
-          <q-breadcrumbs active-color="white" style="font-size: 16px">
-            <q-breadcrumbs-el label="Home" icon="home" to="/"/>
-            <q-breadcrumbs-el label="Logs" :to="{name : 'logs'}"/>
-            <q-breadcrumbs-el label="Educativa" :to="{name : 'logs_educativa'}"/>
-            <q-breadcrumbs-el label="Filter" v-if="type"/>
-            <q-breadcrumbs-el :label="type +':'+ web" v-if="type && web" />
-          </q-breadcrumbs>
-        </q-toolbar>
-        <q-toolbar>
-          <!-- <q-btn flat round dense icon="assignment_ind"/> -->
-          <!-- <q-toolbar-title>Quasar</q-toolbar-title> -->
+  <div class="dashboard-page">
+    <h1 class="page-title">Logs Web</h1>
+    <b-row>
+      <b-col xs="12">
+        <q-tabs
+          v-model="range_tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          narrow-indicator
+        >
+          <q-tab name="periodical" label="Now" />
+          <q-tab name="minute" label="Minute" />
+          <q-tab name="hour" label="Hourly" />
+          <q-tab name="day" label="Daily" />
+        </q-tabs>
+        <q-separator />
+        <q-tab-panels v-model="range_tab">
+          <!-- animated -->
+          <q-tab-panel name="periodical" :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical'">
+            <!-- <div class="text-h6">From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}</div> -->
+            <q-toolbar class="text-primary">
+              <!-- <q-btn flat round dense icon="menu" /> -->
+              <q-toolbar-title>
+                From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}
+              </q-toolbar-title>
+              <!-- <q-space class="text-primary"/> -->
 
-          <q-btn flat class="q-mr-xs" label="Web" :to="{name : 'logs_web'}"/>
-          <q-btn flat class="q-mr-xs" label="Educativa" :to="{name : 'logs_educativa'}"/>
-          <!-- <q-btn flat round dense icon="gamepad"/> -->
-        </q-toolbar>
-      </div>
-      <!-- -->
-      <q-tabs
-        v-model="range_tab"
-        dense
-        class="text-grey"
-        active-color="primary"
-        indicator-color="primary"
-        align="justify"
-        narrow-indicator
-      >
-        <q-tab name="periodical" label="Now" />
-        <q-tab name="minute" label="Minute" />
-        <q-tab name="hour" label="Hourly" />
-        <q-tab name="day" label="Daily" />
-      </q-tabs>
-      <q-separator />
-      <q-tab-panels v-model="range_tab">
-        <!-- animated -->
-        <q-tab-panel name="periodical" :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical'">
-          <!-- <div class="text-h6">From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}</div> -->
-          <q-toolbar class="text-primary">
-            <!-- <q-btn flat round dense icon="menu" /> -->
-            <q-toolbar-title>
-              From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}
-            </q-toolbar-title>
-            <!-- <q-space class="text-primary"/> -->
+            </q-toolbar>
 
-          </q-toolbar>
-
-          <bar-race
-            :categoryY="'cgi'"
-            :valueX="'count'"
-            :values="periodical.top_cgi_count"
-            :label="'Per CGI count (last 5 secs)'"
-            :id="'cgi_count'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.cgi_count'"
-          />
-
-          <bar-race
-            :categoryY="'cgi'"
-            :valueX="'count'"
-            :values="periodical.top_cgi_count"
-            :label="'Per CGI count (sum)'"
-            :id="'cgi_count_sum'"
-            :zoom="apply_zoom"
-            :sum="true"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.cgi_count_sum'"
-          />
-          <!-- :label="format_time(periodical.timestamp)" -->
-
-          <bar-race
-            :categoryY="'domain'"
-            :valueX="'count'"
-            :values="periodical.top_per_domain"
-            :label="'Per DOMAIN - CGI count (last 5 secs)'"
-            :id="'per_domain_count'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_domain_count'"
-          />
-
-          <bar-race
-            :categoryY="'domain'"
-            :valueX="'count'"
-            :values="periodical.top_per_domain"
-            :label="'Per DOMAIN - CGI count (sum)'"
-            :id="'per_domain_count_sum'"
-            :zoom="apply_zoom"
-            :sum="true"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_domain_count_sum'"
-          />
-
-          <bar-race
-            :categoryY="'host'"
-            :valueX="'count'"
-            :values="periodical.top_per_host"
-            :label="'Per HOST - CGI count (last 5 secs)'"
-            :id="'per_host_count'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_host_count'"
-          />
-
-          <bar-race
-            :categoryY="'host'"
-            :valueX="'count'"
-            :values="periodical.top_per_host"
-            :label="'Per HOST - CGI count (sum)'"
-            :id="'per_host_count_sum'"
-            :zoom="apply_zoom"
-            :sum="true"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_host_count_sum'"
-          />
-
-          <bar-race
-            :categoryY="'domain'"
-            :valueX="'sum'"
-            :values="periodical.top_per_domain"
-            :label="'Per DOMAIN - total duration (last 5 secs)'"
-            :id="'per_domain_total'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_domain_total'"
-          />
-
-          <!-- <bar-race :categoryY="'host'" :valueX="'sum'" :values="periodical.per_host" :label="'Per HOST - total duration'" :id="'per_host_sum'" :zoom="apply_zoom" :sum="true"/> -->
-
-          <div v-for="(count, cgi) in periodical.cgi_count" :key="'cgi_count.'+cgi">
-            periodical.cgi_count: {{cgi}} - {{count}} <br/>
-          </div>
-
-          <hr>
-
-          <div v-for="(val, domain) in periodical.per_domain" :key="'per_domain.'+domain">
-            periodical.per_domain: {{domain}} - {{val}} <br/>
-          </div>
-
-          <hr>
-
-          <div v-for="(val, stat) in periodical.duration_stats" :key="'duration_stats.'+stat">
-            periodical.duration_stats: {{stat}} - {{val}} <br/>
-          </div>
-
-          <hr>
-
-        </q-tab-panel>
-
-        <q-tab-panel name="minute" :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute'">
-          <!-- <div class="text-h6">From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}</div> -->
-          <q-toolbar class="text-primary">
-            <!-- <q-btn flat round dense icon="menu" /> -->
-            <q-toolbar-title>
-              From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}
-            </q-toolbar-title>
-            <!-- <q-space class="text-primary"/> -->
-            <template>
-              <div class="q-pa-md">
-
-                <q-btn flat dense icon="access_time" />
-                <q-popup-proxy v-model="showMinute" ref="qMinuteProxy" transition-show="scale" transition-hide="scale">
-                    <q-time
-                      v-model="selected_minute"
-                      :options="disabled_minutes"
-                      now-btn
-                      />
-                      <!-- format24h -->
-                    <!-- @input="() => $refs.qDateProxy.hide()"  -->
-                  <!-- <q-calendar
-                    ref="calendar"
-                    v-model="selectedDate"
-                    view="month"
-                    locale="en-us"
-                    mini-mode
-                    :selected-start-end-dates="startEndDates"
-                    :day-class="classDay"
-                    @mousedown:day="onMouseDownDay"
-                    @mouseup:day="onMouseUpDay"
-                    @mousemove:day="onMouseMoveDay"
-                    :disabled-after="disabled_after()"
-                  /> -->
-                </q-popup-proxy>
-
-              </div>
-            </template>
-          </q-toolbar>
-          <bar-race
-            :categoryY="'domain'"
-            :valueX="'hits'"
-            :values="minute.top_per_domain"
-            :label="'Minute Per DOMAIN - CGI count'"
-            :id="'minute_per_domain_sum'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_domain_sum'"
+            <bar-race
+              :categoryY="'cgi'"
+              :valueX="'count'"
+              :values="periodical.top_cgi_count"
+              :label="'Per CGI count (last 5 secs)'"
+              :id="'cgi_count'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.cgi_count'"
             />
-            <!-- :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_domain_sum'" -->
-          <!-- :zoom="apply_zoom" -->
 
-          <bar-race
-            :categoryY="'host'"
-            :valueX="'hits'"
-            :values="minute.top_per_host"
-            :label="'Minute Per HOST - CGI count'"
-            :id="'minute_per_host_sum'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_host_sum'"
-          />
-          <!-- :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_host_sum'" -->
-          <!-- :zoom="apply_zoom" -->
-
-        </q-tab-panel>
-
-        <q-tab-panel name="hour" :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour'">
-          <!-- <div class="text-h6">From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}</div> -->
-          <q-toolbar class="text-primary">
-            <!-- <q-btn flat round dense icon="menu" /> -->
-            <q-toolbar-title>
-              From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}
-            </q-toolbar-title>
-            <!-- <q-space class="text-primary"/> -->
-            <template>
-              <div class="q-pa-md">
-
-                <q-btn flat dense icon="access_time" />
-                <q-popup-proxy v-model="showHour" ref="qHourProxy" transition-show="scale" transition-hide="scale">
-                    <q-time
-                      v-model="selected_hour"
-                      :options="disabled_hours"
-                      now-btn
-                      />
-                      <!-- format24h -->
-                    <!-- @input="() => $refs.qDateProxy.hide()"  -->
-                  <!-- <q-calendar
-                    ref="calendar"
-                    v-model="selectedDate"
-                    view="month"
-                    locale="en-us"
-                    mini-mode
-                    :selected-start-end-dates="startEndDates"
-                    :day-class="classDay"
-                    @mousedown:day="onMouseDownDay"
-                    @mouseup:day="onMouseUpDay"
-                    @mousemove:day="onMouseMoveDay"
-                    :disabled-after="disabled_after()"
-                  /> -->
-                </q-popup-proxy>
-
-              </div>
-            </template>
-          </q-toolbar>
-          <bar-race
-            :categoryY="'domain'"
-            :valueX="'hits'"
-            :values="hour.top_per_domain"
-            :label="'Hour Per DOMAIN - CGI count'"
-            :id="'hour_per_domain_sum'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour_per_domain_sum'"
+            <bar-race
+              :categoryY="'cgi'"
+              :valueX="'count'"
+              :values="periodical.top_cgi_count"
+              :label="'Per CGI count (sum)'"
+              :id="'cgi_count_sum'"
+              :zoom="apply_zoom"
+              :sum="true"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.cgi_count_sum'"
             />
-          <!-- :zoom="apply_zoom" -->
+            <!-- :label="format_time(periodical.timestamp)" -->
 
-          <bar-race
-            :categoryY="'host'"
-            :valueX="'hits'"
-            :values="hour.top_per_host"
-            :label="'Hour Per HOST - CGI count'"
-            :id="'hour_per_host_sum'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour_per_host_sum'"
+            <bar-race
+              :categoryY="'domain'"
+              :valueX="'count'"
+              :values="periodical.top_per_domain"
+              :label="'Per DOMAIN - CGI count (last 5 secs)'"
+              :id="'per_domain_count'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_domain_count'"
             />
-          <!-- :zoom="apply_zoom" -->
-        </q-tab-panel>
 
-        <q-tab-panel name="day" :key="$route.path +'.'+ JSON.stringify($route.query)+'.day'">
-          <q-toolbar class="text-primary">
-          <!-- <q-btn flat round dense icon="menu" /> -->
-          <q-toolbar-title>
-            From: {{ format_time(day.range.start) }} - To: {{ format_time(day.range.end) }} / Updated on: {{ format_time(day.timestamp) }}
-          </q-toolbar-title>
-          <!-- <q-space class="text-primary"/> -->
-          <template>
-            <div class="q-pa-md">
-              <!-- <q-btn name="calendar_roday" /> -->
-                <!-- round -->
-                <!-- <q-icon name="calendar_today" class="cursor-pointer q-ma-md"/> -->
-                <!-- <q-input flat v-model="date" mask="date" :rules="['date']">
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" :options="disabled_days" minimal/>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input> -->
-                <q-btn flat dense icon="calendar_today" />
-                <q-popup-proxy v-model="showCalendar" ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="selected_day" :options="disabled_days" minimal/>
-                    <!-- @input="() => $refs.qDateProxy.hide()"  -->
-                  <!-- <q-calendar
-                    ref="calendar"
-                    v-model="selectedDate"
-                    view="month"
-                    locale="en-us"
-                    mini-mode
-                    :selected-start-end-dates="startEndDates"
-                    :day-class="classDay"
-                    @mousedown:day="onMouseDownDay"
-                    @mouseup:day="onMouseUpDay"
-                    @mousemove:day="onMouseMoveDay"
-                    :disabled-after="disabled_after()"
-                  /> -->
-                </q-popup-proxy>
+            <bar-race
+              :categoryY="'domain'"
+              :valueX="'count'"
+              :values="periodical.top_per_domain"
+              :label="'Per DOMAIN - CGI count (sum)'"
+              :id="'per_domain_count_sum'"
+              :zoom="apply_zoom"
+              :sum="true"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_domain_count_sum'"
+            />
 
+            <bar-race
+              :categoryY="'host'"
+              :valueX="'count'"
+              :values="periodical.top_per_host"
+              :label="'Per HOST - CGI count (last 5 secs)'"
+              :id="'per_host_count'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_host_count'"
+            />
+
+            <bar-race
+              :categoryY="'host'"
+              :valueX="'count'"
+              :values="periodical.top_per_host"
+              :label="'Per HOST - CGI count (sum)'"
+              :id="'per_host_count_sum'"
+              :zoom="apply_zoom"
+              :sum="true"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_host_count_sum'"
+            />
+
+            <bar-race
+              :categoryY="'domain'"
+              :valueX="'sum'"
+              :values="periodical.top_per_domain"
+              :label="'Per DOMAIN - total duration (last 5 secs)'"
+              :id="'per_domain_total'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.per_domain_total'"
+            />
+
+            <!-- <bar-race :categoryY="'host'" :valueX="'sum'" :values="periodical.per_host" :label="'Per HOST - total duration'" :id="'per_host_sum'" :zoom="apply_zoom" :sum="true"/> -->
+
+            <div v-for="(count, cgi) in periodical.cgi_count" :key="'cgi_count.'+cgi">
+              periodical.cgi_count: {{cgi}} - {{count}} <br/>
             </div>
-          </template>
-        </q-toolbar>
 
-          <!-- <div class="text-h6">From: {{ format_time(day.range.start) }} - To: {{ format_time(day.range.end) }} / Updated on: {{ format_time(day.timestamp) }}</div> -->
-          <bar-race
-            :categoryY="'domain'"
-            :valueX="'hits'"
-            :values="day.top_per_domain"
-            :label="'Day Per DOMAIN - CGI count'"
-            :id="'day_per_domain_sum'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.day_per_domain_sum'"
+            <hr>
+
+            <div v-for="(val, domain) in periodical.per_domain" :key="'per_domain.'+domain">
+              periodical.per_domain: {{domain}} - {{val}} <br/>
+            </div>
+
+            <hr>
+
+            <div v-for="(val, stat) in periodical.duration_stats" :key="'duration_stats.'+stat">
+              periodical.duration_stats: {{stat}} - {{val}} <br/>
+            </div>
+
+            <hr>
+
+          </q-tab-panel>
+
+          <q-tab-panel name="minute" :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute'">
+            <!-- <div class="text-h6">From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}</div> -->
+            <q-toolbar class="text-primary">
+              <!-- <q-btn flat round dense icon="menu" /> -->
+              <q-toolbar-title>
+                From: {{ format_time(minute.range.start) }} - To: {{ format_time(minute.range.end) }} / Updated on: {{ format_time(minute.timestamp) }}
+              </q-toolbar-title>
+              <!-- <q-space class="text-primary"/> -->
+              <template>
+                <div class="q-pa-md">
+
+                  <q-btn flat dense icon="access_time" />
+                  <q-popup-proxy v-model="showMinute" ref="qMinuteProxy" transition-show="scale" transition-hide="scale">
+                      <q-time
+                        v-model="selected_minute"
+                        :options="disabled_minutes"
+                        now-btn
+                        />
+                        <!-- format24h -->
+                      <!-- @input="() => $refs.qDateProxy.hide()"  -->
+                    <!-- <q-calendar
+                      ref="calendar"
+                      v-model="selectedDate"
+                      view="month"
+                      locale="en-us"
+                      mini-mode
+                      :selected-start-end-dates="startEndDates"
+                      :day-class="classDay"
+                      @mousedown:day="onMouseDownDay"
+                      @mouseup:day="onMouseUpDay"
+                      @mousemove:day="onMouseMoveDay"
+                      :disabled-after="disabled_after()"
+                    /> -->
+                  </q-popup-proxy>
+
+                </div>
+              </template>
+            </q-toolbar>
+            <bar-race
+              :categoryY="'domain'"
+              :valueX="'hits'"
+              :values="minute.top_per_domain"
+              :label="'Minute Per DOMAIN - CGI count'"
+              :id="'minute_per_domain_sum'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_domain_sum'"
+              />
+              <!-- :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_domain_sum'" -->
+            <!-- :zoom="apply_zoom" -->
+
+            <bar-race
+              :categoryY="'host'"
+              :valueX="'hits'"
+              :values="minute.top_per_host"
+              :label="'Minute Per HOST - CGI count'"
+              :id="'minute_per_host_sum'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_host_sum'"
             />
-          <!-- :zoom="apply_zoom" -->
+            <!-- :key="$route.path +'.'+ JSON.stringify($route.query)+'.minute_per_host_sum'" -->
+            <!-- :zoom="apply_zoom" -->
 
-          <bar-race
-            :categoryY="'host'"
-            :valueX="'hits'"
-            :values="day.top_per_host"
-            :label="'Day Per HOST - CGI count'"
-            :id="'day_per_host_sum'"
-            :zoom="apply_zoom"
-            :key="$route.path +'.'+ JSON.stringify($route.query)+'.day_per_host_sum'"
-            />
-          <!-- :zoom="apply_zoom" -->
-        </q-tab-panel>
-      </q-tab-panels>
+          </q-tab-panel>
 
-      <q-table
-        class="my-sticky-header-table"
-        title="Web Logs"
-        :data="periodical.logs"
-        :columns="columns"
-        :row-key="(row, index) => row.timestamp + row.domain +'.'+ row.host +'.'+ row.path + '.' + index"
-        :pagination.sync="pagination"
-        virtual-scroll
-        :rows-per-page-options="[0]"
-        :visible-columns="($q.screen.lt.sm) ? visibleColumns : allColumns"
-        :loading="loading_logs"
-        :filter="search_filter"
-        :key="$route.path +'.'+ JSON.stringify($route.query)+'.table'"
-      >
-      <!-- dark
-      color="amber" -->
-        <template v-slot:top="props">
-          <q-select
-            v-if="$q.screen.lt.sm"
-            v-model="visibleColumns"
-            multiple
-            borderless
-            dense
-            options-dense
-            :display-value="$q.lang.table.columns"
-            emit-value
-            map-options
-            :options="columns"
-            option-value="name"
-            style="min-width: 150px"
-          />
-          <q-space />
-          <!-- <div v-if="$q.screen.gt.xs" class="col">
-            <q-toggle v-model="visibleColumns" val="schema" label="Schema" />
-            <q-toggle v-model="visibleColumns" val="uri" label="URI" />
-            <q-toggle v-model="visibleColumns" val="port" label="Port" />
-            <q-toggle v-model="visibleColumns" val="host" label="Host" />
-            <q-toggle v-model="visibleColumns" val="timestamp" label="Last Update" />
-            <q-toggle v-model="visibleColumns" val="path" label="Type" />
-          </div> -->
+          <q-tab-panel name="hour" :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour'">
+            <!-- <div class="text-h6">From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}</div> -->
+            <q-toolbar class="text-primary">
+              <!-- <q-btn flat round dense icon="menu" /> -->
+              <q-toolbar-title>
+                From: {{ format_time(hour.range.start) }} - To: {{ format_time(hour.range.end) }} / Updated on: {{ format_time(hour.timestamp) }}
+              </q-toolbar-title>
+              <!-- <q-space class="text-primary"/> -->
+              <template>
+                <div class="q-pa-md">
 
-          <q-input borderless dense debounce="100" v-model="search_filter" placeholder="Search">
-            <template v-slot:append>
-              <q-icon name="search" />
+                  <q-btn flat dense icon="access_time" />
+                  <q-popup-proxy v-model="showHour" ref="qHourProxy" transition-show="scale" transition-hide="scale">
+                      <q-time
+                        v-model="selected_hour"
+                        :options="disabled_hours"
+                        now-btn
+                        />
+                        <!-- format24h -->
+                      <!-- @input="() => $refs.qDateProxy.hide()"  -->
+                    <!-- <q-calendar
+                      ref="calendar"
+                      v-model="selectedDate"
+                      view="month"
+                      locale="en-us"
+                      mini-mode
+                      :selected-start-end-dates="startEndDates"
+                      :day-class="classDay"
+                      @mousedown:day="onMouseDownDay"
+                      @mouseup:day="onMouseUpDay"
+                      @mousemove:day="onMouseMoveDay"
+                      :disabled-after="disabled_after()"
+                    /> -->
+                  </q-popup-proxy>
+
+                </div>
+              </template>
+            </q-toolbar>
+            <bar-race
+              :categoryY="'domain'"
+              :valueX="'hits'"
+              :values="hour.top_per_domain"
+              :label="'Hour Per DOMAIN - CGI count'"
+              :id="'hour_per_domain_sum'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour_per_domain_sum'"
+              />
+            <!-- :zoom="apply_zoom" -->
+
+            <bar-race
+              :categoryY="'host'"
+              :valueX="'hits'"
+              :values="hour.top_per_host"
+              :label="'Hour Per HOST - CGI count'"
+              :id="'hour_per_host_sum'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.hour_per_host_sum'"
+              />
+            <!-- :zoom="apply_zoom" -->
+          </q-tab-panel>
+
+          <q-tab-panel name="day" :key="$route.path +'.'+ JSON.stringify($route.query)+'.day'">
+            <q-toolbar class="text-primary">
+            <!-- <q-btn flat round dense icon="menu" /> -->
+            <q-toolbar-title>
+              From: {{ format_time(day.range.start) }} - To: {{ format_time(day.range.end) }} / Updated on: {{ format_time(day.timestamp) }}
+            </q-toolbar-title>
+            <!-- <q-space class="text-primary"/> -->
+            <template>
+              <div class="q-pa-md">
+                <!-- <q-btn name="calendar_roday" /> -->
+                  <!-- round -->
+                  <!-- <q-icon name="calendar_today" class="cursor-pointer q-ma-md"/> -->
+                  <!-- <q-input flat v-model="date" mask="date" :rules="['date']">
+                    <template v-slot:append>
+                      <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                          <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" :options="disabled_days" minimal/>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input> -->
+                  <q-btn flat dense icon="calendar_today" />
+                  <q-popup-proxy v-model="showCalendar" ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                      <q-date v-model="selected_day" :options="disabled_days" minimal/>
+                      <!-- @input="() => $refs.qDateProxy.hide()"  -->
+                    <!-- <q-calendar
+                      ref="calendar"
+                      v-model="selectedDate"
+                      view="month"
+                      locale="en-us"
+                      mini-mode
+                      :selected-start-end-dates="startEndDates"
+                      :day-class="classDay"
+                      @mousedown:day="onMouseDownDay"
+                      @mouseup:day="onMouseUpDay"
+                      @mousemove:day="onMouseMoveDay"
+                      :disabled-after="disabled_after()"
+                    /> -->
+                  </q-popup-proxy>
+
+              </div>
             </template>
-          </q-input>
-          <q-btn
-          flat round dense
-          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="props.toggleFullscreen"
-          class="q-ml-md"
-        />
-        </template>
+          </q-toolbar>
 
-        <template v-slot:body="props">
-        <q-tr :props="props">
+            <!-- <div class="text-h6">From: {{ format_time(day.range.start) }} - To: {{ format_time(day.range.end) }} / Updated on: {{ format_time(day.timestamp) }}</div> -->
+            <bar-race
+              :categoryY="'domain'"
+              :valueX="'hits'"
+              :values="day.top_per_domain"
+              :label="'Day Per DOMAIN - CGI count'"
+              :id="'day_per_domain_sum'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.day_per_domain_sum'"
+              />
+            <!-- :zoom="apply_zoom" -->
 
-          <q-td key="date" :props="props">
-            {{ format_time(props.row.timestamp) }}
-          </q-td>
+            <bar-race
+              :categoryY="'host'"
+              :valueX="'hits'"
+              :values="day.top_per_host"
+              :label="'Day Per HOST - CGI count'"
+              :id="'day_per_host_sum'"
+              :zoom="apply_zoom"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.day_per_host_sum'"
+              />
+            <!-- :zoom="apply_zoom" -->
+          </q-tab-panel>
+        </q-tab-panels>
 
-          <q-td key="log" :props="props">
-            {{ format_log(props.row.log) }}
-          </q-td>
+        <q-table
+          flat
+          :table-class="'my-sticky-header-table'"
+          title="Educativa Logs"
+          :data="periodical.logs"
+          :columns="columns"
+          :row-key="(row, index) => row.timestamp + row.domain +'.'+ row.host +'.'+ row.path + '.' + index"
+          :pagination.sync="pagination"
+          :rows-per-page-options="[0]"
+          :visible-columns="($q.screen.lt.sm) ? visibleColumns : allColumns"
+          :loading="loading"
+          :filter="search_filter"
+          :key="$route.path +'.'+ JSON.stringify($route.query)+'.table'"
+        >
+        <!-- dark
+        color="amber" -->
+          <template v-slot:pagination="scope">
+            <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
+             <b-button-group class="mx-1" size="sm">
+               <b-button
+                 v-if="scope.pagesNumber > 2"
+                 :disabled="scope.isFirstPage"
+                 @click="scope.firstPage"
+               >
+                 <i class="fa fa-step-backward"></i>
+               </b-button>
 
-          <q-td key="domain" :props="props">
-            {{ props.row.domain }}
-            <!-- <q-btn type="a" :href="props.row.schema+'://'+props.row.uri+':'+props.row.port" target="_blank" flat icon="open_in_new" /> -->
-            <q-btn v-on:click="destroy_pipelines()" :to="'/logs/educativa/filter/?domain=' + props.row.domain" flat icon="open_in_new" />
-          </q-td>
+               <b-button
+                 v-if="scope.pagesNumber > 2"
+                 :disabled="scope.isFirstPage"
+                 @click="scope.prevPage"
+               >
+                 <i class="fa fa-backward"></i>
+               </b-button>
+             </b-button-group>
+             <b-dropdown class="mx-1" right text="Records per page">
+               <b-dropdown-item @click="pagination.rowsPerPage = 20">20</b-dropdown-item>
+               <b-dropdown-item @click="pagination.rowsPerPage = 50">50</b-dropdown-item>
+               <b-dropdown-item @click="pagination.rowsPerPage = 100">100</b-dropdown-item>
+             </b-dropdown>
+             <b-button-group class="mx-1" size="sm">
+               <b-button
+               :disabled="scope.isLastPage"
+               @click="scope.nextPage"
+               >
+                 <i class="fa fa-forward"></i>
+               </b-button>
 
-          <q-td key="host" :props="props">
-            {{ props.row.host }}
+               <b-button
+               v-if="pagesNumber > 2"
+               :disabled="scope.isLastPage"
+               @click="scope.lastPage"
+               >
+                 <i class="fa fa-step-forward"></i>
+               </b-button>
+             </b-button-group>
+           </b-button-toolbar>
+          </template>
+          <template v-slot:top="props">
+            <q-select
+              v-if="$q.screen.lt.sm"
+              v-model="visibleColumns"
+              multiple
+              borderless
+              dense
+              options-dense
+              :display-value="$q.lang.table.columns"
+              emit-value
+              map-options
+              :options="columns"
+              option-value="name"
+              style="min-width: 150px"
+            />
+            <q-space />
+            <!-- <div v-if="$q.screen.gt.xs" class="col">
+              <q-toggle v-model="visibleColumns" val="schema" label="Schema" />
+              <q-toggle v-model="visibleColumns" val="uri" label="URI" />
+              <q-toggle v-model="visibleColumns" val="port" label="Port" />
+              <q-toggle v-model="visibleColumns" val="host" label="Host" />
+              <q-toggle v-model="visibleColumns" val="timestamp" label="Last Update" />
+              <q-toggle v-model="visibleColumns" val="path" label="Type" />
+            </div> -->
 
-            <q-btn v-on:click="destroy_pipelines()" :to="'/logs/educativa/filter/?host=' + props.row.host" flat icon="open_in_new" />
-          </q-td>
+            <q-input borderless dense debounce="100" v-model="search_filter" placeholder="Search">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+            <q-btn
+            flat round dense
+            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen"
+            class="q-ml-md"
+          />
+          </template>
 
-          <q-td key="path" :props="props">
-            {{ props.row.path }}
+          <template v-slot:body="props">
+          <q-tr :props="props">
 
-            <q-btn v-on:click="destroy_pipelines()" :to="'/logs/educativa/filter/?path=' + props.row.path" flat icon="open_in_new" />
-          </q-td>
-        </q-tr>
-        </template>
-      </q-table>
-    </div>
+            <q-td key="date" :props="props">
+              {{ format_time(props.row.timestamp) }}
+            </q-td>
 
-    <!-- <vk-card class="uk-background-secondary"> -->
+            <q-td key="log" :props="props">
+              {{ format_log(props.row.log) }}
+            </q-td>
 
-      <!-- :label="format_time(periodical.timestamp) -->
+            <q-td key="domain" :props="props">
+              <!-- <q-btn type="a" :href="props.row.schema+'://'+props.row.uri+':'+props.row.port" target="_blank" flat icon="open_in_new" /> -->
+              <b-button
+                variant="outline"
+                @click="destroy_pipelines()"
+                :to="'/logs/educativa/filter/?domain=' + props.row.domain"
+              >
+                {{ props.row.domain }}
+                <q-icon name="open_in_browser" />
+              </b-button>
+              <!-- <q-btn
+                v-on:click="destroy_pipelines()"
+                :to="'/logs/educativa/filter/?domain=' + props.row.domain"
+                flat
+                icon="open_in_browser"
+                :label="props.row.domain"
+              /> -->
+            </q-td>
 
-      <!-- <div v-for="(val, prop) in minute" :key="'minute.'+prop">
-        minute: {{prop}} - {{val}} <br/>
-      </div>
-      <hr>
-
-      <div v-for="(val, prop) in hour" :key="'hour.'+prop">
-        hour: {{prop}} - {{val}} <br/>
-      </div>
-      <hr>
-
-      <div v-for="(val, prop) in day" :key="'day.'+prop">
-        day: {{prop}} - {{val}} <br/>
-      </div>
-      <hr> -->
-
-      <!-- periodical.total_bytes_sent: {{ periodical.total_bytes_sent }} <br/>
-      periodical.hits: {{ periodical.hits }} <br/>
-
-      <hr>
-
-      periodical.current_bytes_sent: {{ periodical.current_bytes_sent }}
-
-      <hr> -->
-
-      <!-- <div v-for="(count, domain) in periodical.domain_count" :key="'domain_count.'+domain">
-        periodical.domain_count: {{domain}} - {{count}} <br/>
-      </div>
-
-      <hr> -->
-
-      <!--
-      <div v-for="(val, city) in periodical.city_counter" :key="'city.'+city">
-        periodical.city_counter: {{city}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, country) in periodical.country_counter" :key="'country.'+country">
-        periodical.country_counter: {{country}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, continent) in periodical.continent_counter" :key="'continent.'+continent">
-        periodical.continent_counter: {{continent}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, addr) in periodical.addr_counter" :key="'addr.'+addr">
-        periodical.addr_counter: {{addr}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, user) in periodical.user_counter" :key="'user.'+user">
-        periodical.user_counter: {{user}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, referer) in periodical.referer_counter" :key="'referer.'+referer">
-        periodical.referer_counter: {{referer}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, type) in periodical.type_counter" :key="'type.'+type">
-        periodical.type_counter: {{type}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, os) in periodical.user_agent_os_counter" :key="'os.'+os">
-        periodical.user_agent_os_counter: {{os}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, os) in periodical.user_agent_os_family_counter" :key="'os_family.'+os+'-'+val">
-        periodical.user_agent_os_family_counter: {{os}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, engine) in periodical.user_agent_engine_counter" :key="'engine.'+engine+'-'+val">
-        periodical.user_agent_engine_counter: {{engine}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, browser) in periodical.user_agent_browser_counter" :key="'browser.'+browser+'-'+val">
-        periodical.user_agent_browser_counter: {{browser}} - {{val}} <br/>
-      </div>
-
-      <hr>
-
-      <div v-for="(val, device) in periodical.user_agent_device_counter" :key="'device.'+device+'-'+val">
-        periodical.user_agent_device_counter: {{device}} - {{val}} <br/>
-      </div> -->
-    <!-- </vk-card> -->
-
-    <!-- <vk-card class="uk-background-secondary"> -->
-      <!-- <div class="uk-overflow-auto">
-      <vk-table :data="vhosts" hoverable narrowed  :divided="false" :sorted-by.sync="sortedBy">
-        <vk-table-column-sort title="URI" cell="uri" linked></vk-table-column-sort>
-        <vk-table-column title="Prot" cell="port"></vk-table-column>
-        <vk-table-column title="Schema" cell="schema"></vk-table-column>
-        <vk-table-column title="Host" cell="host"></vk-table-column>
-        <vk-table-column title="Last Update" cell="timestamp"></vk-table-column>
-        <vk-table-column title="Type" cell="path"></vk-table-column>
-      </vk-table>
-      </div> -->
-
-      <!-- v-if="!web" -->
-
-    <!-- </vk-card> -->
-
-    <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]" :duration="50">
-      <q-btn fab icon="keyboard_arrow_up" color="accent" />
-    </q-page-scroller>
-
-  </q-page>
+            <q-td key="host" :props="props">
+              <b-button
+                variant="outline"
+                @click="destroy_pipelines()"
+                :to="'/logs/educativa/filter/?host=' + props.row.host"
+              >
+                {{ props.row.host }}
+                <q-icon name="open_in_browser" />
+              </b-button>
+              <!-- <q-btn
+                v-on:click="destroy_pipelines()"
+                :to="'/logs/educativa/filter/?host=' + props.row.host"
+                flat
+                icon="open_in_browser"
+                :label="props.row.host"
+              /> -->
+            </q-td>
+            <!-- <q-td key="timestamp" :props="props">
+              {{ format_time(props.row.timestamp) }}
+            </q-td> -->
+            <q-td key="path" :props="props">
+              <b-button
+                variant="outline"
+                @click="destroy_pipelines()"
+                :to="'/logs/educativa/filter/?path=' + props.row.path"
+              >
+                {{ props.row.path }}
+                <q-icon name="open_in_browser" />
+              </b-button>
+              <!-- <q-btn
+                v-on:click="destroy_pipelines()"
+                :to="'/logs/educativa/filter/?path=' + props.row.path"
+                flat
+                icon="open_in_browser"
+                :label="props.row.path"
+              /> -->
+            </q-td>
+          </q-tr>
+          </template>
+        </q-table>
+      </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script>
