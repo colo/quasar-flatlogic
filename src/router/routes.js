@@ -24,7 +24,7 @@ const routes = [
       {
         name: 'system',
         path: 'system',
-        // component: () => import(/* webpackChunkName: "system" */ 'pages/Dashboard/Dashboard'),
+        component: () => import(/* webpackChunkName: "system" */ '@apps/system/index.vue'),
         redirect: { name: 'system_hosts' },
 
         meta: {
@@ -34,7 +34,7 @@ const routes = [
           {
             path: 'hosts',
             name: 'system_hosts',
-            component: () => import(/* webpackChunkName: "system.hosts" */ 'pages/Dashboard/Dashboard'),
+            component: () => import(/* webpackChunkName: "system.hosts" */ '@apps/system/pages/hosts.vue'),
             meta: {
               breadcrumb: { label: 'Hosts', icon: 'widgets', navbar: true }
             },
@@ -42,7 +42,7 @@ const routes = [
               {
                 path: ':host',
                 name: 'system_host',
-                component: () => import(/* webpackChunkName: "system.host" */ 'pages/Dashboard/Dashboard'),
+                component: () => import(/* webpackChunkName: "system.host" */ '@apps/system/pages/host.vue'),
                 meta: {
                   breadcrumb: { label: 'Host', icon: 'widgets' }
                 }
@@ -52,7 +52,7 @@ const routes = [
           {
             path: 'categories',
             name: 'system_categories',
-            component: () => import(/* webpackChunkName: "system.hosts" */ 'pages/Dashboard/Dashboard'),
+            component: () => import(/* webpackChunkName: "system.hosts" */ '@apps/system/pages/categories.vue'),
             meta: {
               breadcrumb: { label: 'Categories', icon: 'widgets', navbar: true }
             },
@@ -60,7 +60,7 @@ const routes = [
               {
                 path: ':category',
                 name: 'system_category',
-                component: () => import(/* webpackChunkName: "system.category" */ 'pages/Dashboard/Dashboard'),
+                component: () => import(/* webpackChunkName: "system.category" */ '@apps/system/pages/category.vue'),
                 meta: {
                   breadcrumb: { label: 'Category', icon: 'widgets', app: 'system' }
                 }

@@ -113,7 +113,7 @@
         ></b-pagination>
       </b-col>
     </b-row> -->
-    <b-row>
+      <b-row>
         <b-col xs="12">
           <Widget
             customHeader

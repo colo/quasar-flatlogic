@@ -1,0 +1,186 @@
+<template>
+  <div>
+    <template v-for="(host) in plugins_hosts">
+      <a :id="host" :key="host+'.anchor'"/>
+      <q-card :key="host">
+        <q-card-section>
+          <div class="text-h3">{{host}}</div>
+        </q-card-section>
+
+        <q-card-section>
+          <template v-for="(name) in plugins">
+            <system-plugin-dygraph v-if="name.indexOf(host) > -1" :ref="name" :id="name" :name="name"  :key="name+'.plugin'"/>
+          </template>
+        </q-card-section>
+        <!-- <q-separator dark /> -->
+      </q-card>
+    </template>
+  </div>
+</template>
+
+<script>
+import * as Debug from 'debug'
+const debug = Debug('apps:system:pages:category')
+
+//
+
+// let moment = require('moment')
+
+import SystemPluginDygraph from '@apps/system/components/pluginDygraph'
+
+import DataSourcesMixin from '@components/mixins/dataSources'
+
+import JSPipeline from 'js-pipeline'
+import Pipeline from '@apps/system/pipelines/category'
+
+import { requests, store } from '@apps/system/sources/category/periodical/index'
+
+// const MAX_FEED_DATA = 10
+
+export default {
+  mixins: [DataSourcesMixin],
+
+  components: { SystemPluginDygraph },
+
+  name: 'SystemHost',
+
+  data () {
+    return {
+      id: 'system.category',
+      path: 'all',
+
+      // os: [],
+      store: false,
+      pipeline_id: 'input.system.category',
+
+      plugins: [],
+      // plugins_config: {},
+      plugins_hosts: [],
+
+      components: {
+        range: {
+          // source: {
+          //   requests: {
+          //     once: [],
+          //     periodical: []
+          //   }
+          // }
+          source: {
+            requests: requests
+
+            // store: store
+          }
+        }
+
+      }
+    }
+  },
+
+  watch: {
+    // 'plugins_config': function (val) {
+    //   debug('watch plugins_config %o', val.graph)
+    // }
+  },
+  methods: {
+
+    /**
+    * @start pipelines
+    **/
+    create_pipelines: function (next) {
+      debug('create_pipelines %o', this.$options.pipelines)
+
+      if (this.$options.pipelines['input.system.category'] && this.$options.pipelines['input.system.category'].get_input_by_id('input.system.category')) {
+        // let requests = this.__components_sources_to_requests(this.components)
+        // if (requests.once) {
+        //   this.$options.pipelines['input.system.category'].get_input_by_id('input.system.category').conn_pollers[0].options.requests.once.combine(requests.once)
+        //   this.$options.pipelines['input.system.category'].get_input_by_id('input.system.category').conn_pollers[0].fireEvent('onOnceRequestsUpdated')
+        // }
+        //
+        // if (requests.periodical) {
+        //   this.$options.pipelines['input.system.category'].get_input_by_id('input.system.category').conn_pollers[0].options.requests.periodical.combine(requests.periodical)
+        //   this.$options.pipelines['input.system.category'].get_input_by_id('input.system.category').conn_pollers[0].fireEvent('onPeriodicalRequestsUpdated')
+        // }
+      } else {
+        let template = Object.clone(Pipeline)
+
+        let pipeline_id = template.input[0].poll.id
+        // let pipeline_id = 'input.system.category'
+
+        // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components)
+        Array.each(template.input[0].poll.conn, function (conn, index) {
+          template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.components)
+        }.bind(this))
+
+        let pipe = new JSPipeline(template)
+
+        this.$options.__pipelines_cfg[pipeline_id] = {
+          ids: [],
+          connected: [],
+          suspended: pipe.inputs.every(function (input) { return input.options.suspended }, this)
+        }
+
+        // this.__after_connect_inputs(
+        //   pipe,
+        //   this.$options.__pipelines_cfg[pipeline_id],
+        //   this.__resume_pipeline.pass([pipe, this.$options.__pipelines_cfg[pipeline_id], this.id, function () {
+        //     debug('__resume_pipeline CALLBACK')
+        //     pipe.fireEvent('onOnce')
+        //   }], this)
+        // )
+
+        this.$options.pipelines[pipeline_id] = pipe
+
+        debug('create_pipelines %o', this.$options.pipelines)
+
+        if (next) { next() }
+      }
+    }
+
+    /**
+    * @end pipelines
+    **/
+
+  },
+  computed: {
+    'category': function () {
+      return (this.$route && this.$route.params && this.$route.params.category) ? this.$route.params.category : undefined
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    debug('lifecycle beforeRouteLeave')
+    this.destroy_pipelines()
+    next()
+  }
+  // computed: {
+  //
+  // //   count: function () {
+  // //     let result = 0
+  // //     Array.each(this.groups, function (group) {
+  // //       result += group.count
+  // //     })
+  // //
+  // //     return result
+  // //   }
+  // },
+  // mounted: function () {
+  //   this.pipeline_id = 'input.system.category'
+  // },
+  // create: function () {
+  //   debug('created HOST %s %o %o', this.category, this.$options.range_component, this.$options.__pipelines_cfg)
+  //   // EventBus.$on(this.pipeline_id, this.__process_input_data)
+  //
+  //   // if (this.store) this.__register_store_module(this.id, sourceStore)
+  //   // this.__bind_components_to_sources(this.components)
+  //   // this.create_pipelines()
+  //
+  //   // this.$options.range_component.source.requests.once[0].params.query.filter.metadata.category = this.category
+  //   // this.$options.feed_component.source.requests.periodical[0].params.query.filter.metadata.category = this.category
+  //   // this.$set(this.components, 'range', this.$options.range_component)
+  //   // this.$set(this.components, 'feed', this.$options.feed_component)
+  //   // this.components.range.source.requests.once.push(this.$options.range_component)
+  //
+  //   this.components.range.source.requests.periodical.push(this.$options.range_component)
+  // }
+
+}
+</script>
