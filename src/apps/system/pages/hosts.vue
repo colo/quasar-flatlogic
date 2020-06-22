@@ -20,6 +20,7 @@
             :categories="host_paths"
             :host="host_name"
             :host_data="hosts_data[host_name]"
+            :show_categories="(host_name === host) ? true : false"
           />
         </template>
 
@@ -31,6 +32,7 @@
             v-if="host_name === host"
             :categories="host_paths"
             :host="host_name"
+            :show_categories="(host_name === host) ? true : false"
           />
           <!-- :host_data="hosts_data[host_name]" -->
         </template>

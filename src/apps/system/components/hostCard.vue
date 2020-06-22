@@ -26,7 +26,7 @@
           <!-- <i class="fa fa-external-link"></i> -->
         </b-button>
       </b-button-group>
-      <b-button-group class="mx-1">
+      <b-button-group class="mx-1" v-if="show_categories === true">
         <b-button
           variant="outline-info"
           v-for="category in categories"
@@ -218,6 +218,10 @@ export default {
   // unwatch_store: undefined,
 
   props: {
+    show_categories: {
+      type: Boolean,
+      default: true
+    },
     host: {
       type: String,
       default: ''
