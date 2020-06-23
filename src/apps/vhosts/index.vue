@@ -323,11 +323,18 @@ export default {
   //   // Set the initial number of items
   //   this.totalRows = this.vhosts.length
   // },
-  computed: {
-    pagesNumber () {
-      return Math.ceil(this.vhosts.length / this.pagination.rowsPerPage)
+
+  req_components: {
+    'input.vhosts.periodical': {
+      range: {
+        source: {
+          requests: PeriodicalSources.requests
+          // store: store
+        }
+      }
     }
   },
+
   data () {
     return {
       height: '0px',
@@ -450,16 +457,21 @@ export default {
       id: 'vhosts',
       path: 'all',
 
-      components: {
-        'input.vhosts.periodical': {
-          range: {
-            source: {
-              requests: PeriodicalSources.requests
-              // store: store
-            }
-          }
-        }
-      }
+      // components: {
+      //   'input.vhosts.periodical': {
+      //     range: {
+      //       source: {
+      //         requests: PeriodicalSources.requests
+      //         // store: store
+      //       }
+      //     }
+      //   }
+      // }
+    }
+  },
+  computed: {
+    pagesNumber () {
+      return Math.ceil(this.vhosts.length / this.pagination.rowsPerPage)
     }
   },
   methods: {
@@ -511,7 +523,7 @@ export default {
         if (!create_id || create_id === undefined || create_id === pipeline_id) {
           // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
           Array.each(template.input[0].poll.conn, function (conn, index) {
-            template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
+            template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components[pipeline_id], pipeline_id)
           }.bind(this))
 
           let pipe = new JSPipeline(template)

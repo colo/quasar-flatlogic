@@ -57,6 +57,7 @@ export default {
     }
     Array.each(pipeline_id, function (id) {
       EventBus.$on(id + '.' + this.path, this.__process_input_data)
+      // EventBus.$on(id + '.' + this.path, function (data) { debug('EventBus.$on', id + '.' + this.path, data) })
     }.bind(this))
 
     if (this.store) this.__register_store_module(this.id, sourceStore)
@@ -378,8 +379,8 @@ export default {
     __process_data: function (payload, type) {
       type = type || 'requests'
       let key = payload.id
-      // convert to array of array so it can be pass as parameter
-      // if (Array.isArray(payload.data)) payload.data = [payload.data]
+      debug('__process_input_data', this.$options._components_req)
+
       Object.each(this.$options._components_req, function (_components_req, pipeline_id) {
         for (const prop in _components_req) {
           let components = _components_req[prop]

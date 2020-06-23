@@ -215,6 +215,18 @@ export default {
   // pipelines: {},
   // __pipelines_cfg: {},
   // unwatch_store: undefined,
+  req_components: {
+    'all': [
+      {
+        source: {
+          requests: requests
+
+          // store: store
+        }
+      }
+
+    ]
+  },
 
   data () {
     return {
@@ -263,18 +275,18 @@ export default {
       id: 'logs.web.all',
       path: 'all',
 
-      components: {
-        'all': [
-          {
-            source: {
-              requests: requests
-
-              // store: store
-            }
-          }
-
-        ]
-      }
+      // components: {
+      //   'all': [
+      //     {
+      //       source: {
+      //         requests: requests
+      //
+      //         // store: store
+      //       }
+      //     }
+      //
+      //   ]
+      // }
     }
   },
   computed: {
@@ -307,7 +319,7 @@ export default {
 
         // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components)
         Array.each(template.input[0].poll.conn, function (conn, index) {
-          template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.components)
+          template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components)
         }.bind(this))
 
         let pipe = new JSPipeline(template)

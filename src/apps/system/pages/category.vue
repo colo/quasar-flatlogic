@@ -48,6 +48,23 @@ export default {
 
   name: 'SystemHost',
 
+  req_components: {
+    range: {
+      // source: {
+      //   requests: {
+      //     once: [],
+      //     periodical: []
+      //   }
+      // }
+      source: {
+        requests: requests
+
+        // store: store
+      }
+    }
+
+  },
+
   data () {
     return {
       id: 'system.category',
@@ -61,22 +78,22 @@ export default {
       // plugins_config: {},
       plugins_hosts: [],
 
-      components: {
-        range: {
-          // source: {
-          //   requests: {
-          //     once: [],
-          //     periodical: []
-          //   }
-          // }
-          source: {
-            requests: requests
-
-            // store: store
-          }
-        }
-
-      }
+      // components: {
+      //   range: {
+      //     // source: {
+      //     //   requests: {
+      //     //     once: [],
+      //     //     periodical: []
+      //     //   }
+      //     // }
+      //     source: {
+      //       requests: requests
+      //
+      //       // store: store
+      //     }
+      //   }
+      //
+      // }
     }
   },
 
@@ -112,7 +129,7 @@ export default {
 
         // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components)
         Array.each(template.input[0].poll.conn, function (conn, index) {
-          template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.components)
+          template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components)
         }.bind(this))
 
         let pipe = new JSPipeline(template)

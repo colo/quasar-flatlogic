@@ -171,6 +171,16 @@ export default {
   // pipelines: {},
   // __pipelines_cfg: {},
   // unwatch_store: undefined,
+  req_components: {
+    'input.checks.periodical': {
+      range: {
+        source: {
+          requests: PeriodicalSources.requests
+          // store: store
+        }
+      }
+    }
+  },
 
   data () {
     return {
@@ -237,16 +247,16 @@ export default {
       id: 'checks',
       path: 'all',
 
-      components: {
-        'input.checks.periodical': {
-          range: {
-            source: {
-              requests: PeriodicalSources.requests
-              // store: store
-            }
-          }
-        }
-      }
+      // components: {
+      //   'input.checks.periodical': {
+      //     range: {
+      //       source: {
+      //         requests: PeriodicalSources.requests
+      //         // store: store
+      //       }
+      //     }
+      //   }
+      // }
     }
   },
   computed: {
@@ -289,7 +299,7 @@ export default {
         if (!create_id || create_id === undefined || create_id === pipeline_id) {
           // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
           Array.each(template.input[0].poll.conn, function (conn, index) {
-            template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
+            template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components[pipeline_id], pipeline_id)
           }.bind(this))
 
           let pipe = new JSPipeline(template)
