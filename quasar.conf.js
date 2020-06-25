@@ -8,6 +8,7 @@
 /* eslint-env node */
 
 const path = require('path')
+// const WorkerPlugin = require('worker-plugin')
 
 module.exports = function (/* ctx */) {
   return {
@@ -83,6 +84,12 @@ module.exports = function (/* ctx */) {
             fix: true
           }
         })
+        cfg.module.rules.push({
+          test: /\.worker\.js$/,
+          use: { loader: 'sharedworker-loader' },
+        })
+
+        // cfg.plugins.push(new WorkerPlugin({sharedWorker: true}))
 
         cfg.resolve.alias = {
           ...cfg.resolve.alias, // This adds the existing alias
