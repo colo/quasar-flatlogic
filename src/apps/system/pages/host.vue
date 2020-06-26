@@ -2,7 +2,7 @@
 
   <div class="q-pa-md">
     <b-card no-body>
-      <b-tabs pills card lazy>
+      <b-tabs pills card lazy v-model="tab">
         <b-tab title="Now" no-body active>
           <q-toolbar class="text-primary">
             <!-- <q-btn flat round dense icon="menu" /> -->
@@ -467,6 +467,7 @@ export default {
       id: 'system.host',
       path: 'all',
 
+      tab: 0, // current tab
       day: {
         plugins_data: {},
         plugins: [],
@@ -571,6 +572,12 @@ export default {
   },
 
   watch: {
+    tab: function (index) {
+      debug('current tab', index)
+      this.destroy_pipelines()
+      this.create_pipelines()
+      this.resume_pipelines()
+    },
     selected_day () {
       debug('selected_day %s', new Date(moment(this.selected_day, 'YYYY/MM/DD').unix() * 1000))
       if (roundHours(moment(this.selected_day, 'YYYY/MM/DD').unix() * 1000) === roundHours(Date.now())) {
@@ -726,36 +733,38 @@ export default {
       //   // }
       // } else {
       const pipelines = [PeriodicalPipeline, MinutePipeline, HourPipeline, DayPipeline] //,
-      Array.each(pipelines, function (Pipeline) {
-        let template = Object.clone(Pipeline)
+      Array.each(pipelines, function (Pipeline, index) {
+        if (this.tab === index) {
+          let template = Object.clone(Pipeline)
 
-        debug('create_pipelines template %o', template)
+          debug('create_pipelines template %o', template)
 
-        let pipeline_id = template.input[0].poll.id
-        if (!create_id || create_id === undefined || create_id === pipeline_id) {
-          // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
-          Array.each(template.input[0].poll.conn, function (conn, index) {
-            template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components[pipeline_id], pipeline_id)
-          }.bind(this))
+          let pipeline_id = template.input[0].poll.id
+          if (!create_id || create_id === undefined || create_id === pipeline_id) {
+            // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
+            Array.each(template.input[0].poll.conn, function (conn, index) {
+              template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components[pipeline_id], pipeline_id)
+            }.bind(this))
 
-          let pipe = new JSPipeline(template)
+            let pipe = new JSPipeline(template)
 
-          this.$options.__pipelines_cfg[pipeline_id] = {
-            ids: [],
-            connected: [],
-            suspended: pipe.inputs.every(function (input) { return input.options.suspended }, this)
+            this.$options.__pipelines_cfg[pipeline_id] = {
+              ids: [],
+              connected: [],
+              suspended: pipe.inputs.every(function (input) { return input.options.suspended }, this)
+            }
+
+            // this.__after_connect_inputs(
+            //   pipe,
+            //   this.$options.__pipelines_cfg[pipeline_id],
+            //   this.__resume_pipeline.pass([pipe, this.$options.__pipelines_cfg[pipeline_id], this.id, function () {
+            //     debug('__resume_pipeline CALLBACK')
+            //     pipe.fireEvent('onOnce')
+            //   }], this)
+            // )
+
+            this.$options.pipelines[pipeline_id] = pipe
           }
-
-          // this.__after_connect_inputs(
-          //   pipe,
-          //   this.$options.__pipelines_cfg[pipeline_id],
-          //   this.__resume_pipeline.pass([pipe, this.$options.__pipelines_cfg[pipeline_id], this.id, function () {
-          //     debug('__resume_pipeline CALLBACK')
-          //     pipe.fireEvent('onOnce')
-          //   }], this)
-          // )
-
-          this.$options.pipelines[pipeline_id] = pipe
         }
       }.bind(this))
 
