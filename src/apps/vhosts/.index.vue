@@ -25,7 +25,7 @@ const debug = Debug('apps:root')
 import JSPipeline from 'js-pipeline'
 import Pipeline from '@apps/root/pipelines/index'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import { requests, store } from './sources/index'
 

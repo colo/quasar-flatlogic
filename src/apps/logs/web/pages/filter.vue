@@ -549,7 +549,7 @@ import BarRace from '@apps/logs/components/barRace'
 
 import WorldMap from '@apps/logs/web/components/worldMap'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import JSPipeline from 'js-pipeline'
 

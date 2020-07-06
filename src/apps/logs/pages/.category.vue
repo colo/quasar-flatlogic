@@ -39,7 +39,7 @@ const debug = Debug('apps:os:pages:category')
 
 import OsPluginDygraph from '@apps/os/components/pluginDygraph'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import JSPipeline from 'js-pipeline'
 import Pipeline from '@apps/os/pipelines/category'

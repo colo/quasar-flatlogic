@@ -44,7 +44,7 @@ const debug = Debug('apps:system:components:categoryCard')
 // import JSPipeline from 'js-pipeline'
 // import Pipeline from '@apps/system/pipelines/index'
 
-// import DataSourcesMixin from '@components/mixins/dataSources'
+// import DataSourcesMixin from '@mixins/dataSources'
 
 // import { requests, store } from './sources/index'
 

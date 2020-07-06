@@ -1,10 +1,10 @@
 <script>
 
 import * as Debug from 'debug'
-const debug = Debug('components:mixins:DataSources')
+const debug = Debug('mixins:DataSources')
 
 // import dataStore from 'src/store/data'
-import sourceStore from 'src/store/source'
+import sourceStore from '@store/source'
 
 import { EventBus } from '@libs/eventbus'
 
@@ -111,6 +111,21 @@ export default {
 
     // this.__unregister_store_module(this.id)
     next()
+  },
+  destroyed () {
+    debug('lifecycle destroyed')
+
+    let pipeline_id = []
+    if (!Array.isArray(this.pipeline_id)) {
+      pipeline_id = [this.pipeline_id]
+    } else {
+      pipeline_id = this.pipeline_id
+    }
+    Array.each(pipeline_id, function (id) {
+      EventBus.$off(id + '.' + this.path, this.__process_input_data)
+    }.bind(this))
+
+    this.destroy_pipelines()
   },
   // computed: mapState({
   //
@@ -555,53 +570,109 @@ export default {
       // })
     },
 
-    suspend_pipelines: function () {
+    suspend_pipelines: function (suspend_id) {
       debug('suspend_pipelines %s', this.pipeline_id)
 
-      Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
-        if ((Array.isArray(this.pipeline_id) && this.pipeline_id.contains(id)) || id === this.pipeline_id) {
-          pipe.fireEvent('onSuspend')
-          // pipe.fireEvent('onExit')
-          // pipe.removeEvents()
-          //
-          // delete this.$options.pipelines[id]
+      let pipeline_id = []
+      if (!Array.isArray(this.pipeline_id)) {
+        pipeline_id = [this.pipeline_id]
+      } else {
+        pipeline_id = this.pipeline_id
+      }
+
+      Array.each(pipeline_id, function (id) {
+        if (!suspend_id || suspend_id === undefined || suspend_id === id) {
+          let pipe = this.$options.pipelines[id]
+          if (pipe) {
+            pipe.fireEvent('onSuspend')
+
+            debug('suspended_pipelines', id)
+          }
         }
       }.bind(this))
+
+      // Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
+      //   if ((Array.isArray(this.pipeline_id) && this.pipeline_id.contains(id)) || id === this.pipeline_id) {
+      //     pipe.fireEvent('onSuspend')
+      //     // pipe.fireEvent('onExit')
+      //     // pipe.removeEvents()
+      //     //
+      //     // delete this.$options.pipelines[id]
+      //   }
+      // }.bind(this))
 
       debug('suspend_pipelines', this.$options.pipelines)
     },
     resume_pipelines: function (resume_id) {
       debug('resume_pipelines %s', resume_id, this.pipeline_id)
 
-      Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
-        if (
-          ((Array.isArray(this.pipeline_id) && this.pipeline_id.contains(id)) || id === this.pipeline_id) &&
-          (!resume_id || resume_id === undefined || resume_id === id)
-        ) {
-          pipe.fireEvent('onResume')
-          pipe.fireEvent('onOnce')
-          // pipe.fireEvent('onExit')
-          // pipe.removeEvents()
-          //
-          // delete this.$options.pipelines[id]
-          debug('resumed_pipelines', id)
+      let pipeline_id = []
+      if (!Array.isArray(this.pipeline_id)) {
+        pipeline_id = [this.pipeline_id]
+      } else {
+        pipeline_id = this.pipeline_id
+      }
+
+      Array.each(pipeline_id, function (id) {
+        if (!resume_id || resume_id === undefined || resume_id === id) {
+          let pipe = this.$options.pipelines[id]
+          if (pipe) {
+            pipe.fireEvent('onResume')
+            pipe.fireEvent('onOnce')
+
+            debug('resumed_pipelines', id)
+          }
         }
       }.bind(this))
+
+      // Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
+      //   if (
+      //     ((Array.isArray(this.pipeline_id) && this.pipeline_id.contains(id)) || id === this.pipeline_id) &&
+      //     (!resume_id || resume_id === undefined || resume_id === id)
+      //   ) {
+      //     pipe.fireEvent('onResume')
+      //     pipe.fireEvent('onOnce')
+      //     // pipe.fireEvent('onExit')
+      //     // pipe.removeEvents()
+      //     //
+      //     // delete this.$options.pipelines[id]
+      //     debug('resumed_pipelines', id)
+      //   }
+      // }.bind(this))
 
       debug('resume_pipelines', this.$options.pipelines)
     },
     destroy_pipelines: function (destroy_id) {
       debug('destroy_pipelines %s', destroy_id, this.pipeline_id)
+      let pipeline_id = []
+      if (!Array.isArray(this.pipeline_id)) {
+        pipeline_id = [this.pipeline_id]
+      } else {
+        pipeline_id = this.pipeline_id
+      }
 
-      Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
+      Array.each(pipeline_id, function (id) {
         if (!destroy_id || destroy_id === undefined || destroy_id === id) {
-          pipe.fireEvent('onSuspend')
-          pipe.fireEvent('onExit')
-          pipe.removeEvents()
+          let pipe = this.$options.pipelines[id]
+          if (pipe) {
+            pipe.fireEvent('onSuspend')
+            pipe.fireEvent('onExit')
+            pipe.removeEvents()
 
-          delete this.$options.pipelines[id]
+            delete this.$options.pipelines[id]
+          }
         }
       }.bind(this))
+
+      // Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
+      //   if (!destroy_id || destroy_id === undefined || destroy_id === id) {
+      //     pipe.fireEvent('onSuspend')
+      //     pipe.fireEvent('onExit')
+      //     pipe.removeEvents()
+      //
+      //     delete this.$options.pipelines[id]
+      //   }
+      // }.bind(this))
 
       debug('destroy_pipelines', this.$options.pipelines)
     },

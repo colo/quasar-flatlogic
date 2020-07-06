@@ -99,9 +99,10 @@ module.exports = function (/* ctx */) {
           '@libs': path.resolve(__dirname, './src/libs'),
           '@etc': path.resolve(__dirname, './src/etc'),
           '@components': path.resolve(__dirname, './src/components'),
-          '@mixins': path.resolve(__dirname, './src/components/mixins'),
+          '@mixins': path.resolve(__dirname, './src/mixins'),
           '@wrappers': path.resolve(__dirname, './src/components/wrappers'),
           '@apps': path.resolve(__dirname, './src/apps'),
+          '@store': path.resolve(__dirname, './src/store'),
           '@styles': path.resolve(__dirname, './src/styles/sing-app'),
           // '@styles': path.resolve(__dirname, './src/styles/light-blue'),
           vue$: 'vue/dist/vue.runtime.esm.js'

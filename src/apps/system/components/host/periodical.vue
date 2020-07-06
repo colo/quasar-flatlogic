@@ -1,245 +1,310 @@
 <template>
-  <!-- <q-card>
-    <q-card-section>
-      <q-btn
-        flat
-        :to="{
-          name: 'system_host',
-          params: { host: host },
-        }"
+  <div>
+    <q-toolbar class="text-primary">
+      <!-- <q-btn flat round dense icon="menu" /> -->
+      <q-toolbar-title>
+        From: {{ format_time(periodical.range.start) }} - To: {{ format_time(periodical.range.end) }} / Updated on: {{ format_time(periodical.timestamp) }}
+      </q-toolbar-title>
+      <!-- <q-space class="text-primary"/> -->
+
+    </q-toolbar>
+    <template v-for="(category) in periodical.plugins_categories">
+      <!-- {{category}} -->
+      <!-- <q-card :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.'+category"> -->
+      <Widget
+        :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical.'+category"
       >
-        {{host}}
-      </q-btn> -->
+        <a :id="category"/>
+        <!-- <q-card-section> -->
+          <div class="text-h3">{{category}}</div>
+        <!-- </q-card-section> -->
 
-    <Widget
-    >
-    <b-button-toolbar key-nav aria-label="Toolbar with button groups">
-      <b-button-group class="mx-1">
-        <b-button
-          variant="primary"
-          :to="{
-            name: 'system_host',
-            params: { host: host },
-          }"
-        >
-          {{host}}
-          <!-- <i class="fa fa-external-link"></i> -->
-        </b-button>
-      </b-button-group>
-      <b-button-group class="mx-1" v-if="show_categories === true">
-        <b-button
-          variant="outline-info"
-          v-for="category in categories"
-          :key="host+'.'+category"
-          :href="'/system/hosts/'+host+'#'+category"
-        >
-        <!-- :to="{
-          name: 'system_host',
-          params: { host: host },
-          hash: '#'+category
-        }" -->
-          {{category}}
-        </b-button>
-      </b-button-group>
-    </b-button-toolbar>
-
-      <template v-if="Object.getLength(host_data) > 0">
-        <div class="q-pa-md netdata-chart-row"  :style="'height: 200px'">
-          <!-- ; width: 100%  -->
-
-          <div class="row" :style="'width: 100%'">
-            <div class="col">
-              <vue-easy-pie-chart-wrapper
-                :id="host+'.loadavg'"
-                :chart="{
-                  class: 'netdata-chart netdata-easypiechart-chart',
-                  params:{
-                    'bar-color': '#66AA00',
-                    'size': 130,
-                    /* 'percent': host_data['os.loadavg']['1_min'] || 0, */
-                    'percent': (100 * host_data['os.loadavg']['1_min']  / host_data['os.loadavg.max']) || 0,
-                    'value': host_data['os.loadavg']['1_min'],
-                    'max': host_data['os.loadavg.max'] || 0,
-                    'title': 'Load',
-                    unit: '1min avg',
-                    /**minValue: 0,
-                    maxValue: 100,
-                    unit: '%',
-                    value: host_data['os.cpus.percentage'] || 0,
-                    height: '200px',
-                    width: '334px' */
-                  }
-                }"
-              />
-            </div>
-            <div class="col">
-              <vue-easy-pie-chart-wrapper
-                :id="host+'.net.out'"
-                :chart="{
-                  class: 'netdata-chart netdata-easypiechart-chart',
-                  params:{
-                    'bar-color': '#3366CC',
-                    'size': 150,
-                    'percent': (100 * host_data['os.networkInterfaces.out'] / host_data['os.networkInterfaces.max.out']) || 0,
-                    'value': host_data['os.networkInterfaces.out'] / 125,
-                    'max': host_data['os.networkInterfaces.max.out'] || 0,
-                    title: 'Net Outbound',
-                    unit: 'kilobits/s',
-                  }
-                }"
-              />
-            </div>
-            <div class="col">
-              <vue-easy-pie-chart-wrapper
-                :id="host+'.net.in'"
-                :chart="{
-                  class: 'netdata-chart netdata-easypiechart-chart',
-                  params:{
-                    'bar-color': '#DC3912',
-                    'size': 150,
-                    'percent': (100 * host_data['os.networkInterfaces.in'] / host_data['os.networkInterfaces.max.in']) || 0,
-                    'value': host_data['os.networkInterfaces.in'] / 125,
-                    'max': host_data['os.networkInterfaces.max.in'] || 0,
-                    'title': 'Net Inbound',
-                    'unit': 'kilobits/s'//'kilobits/s',
-                  }
-                }"
-              />
-            </div>
-            <div class="col-3">
-              <v-gauge-wrapper
-                :id="host+'.cpu'"
-                :chart="{
-                  class: 'netdata-chart netdata-gauge-chart',
-                  params:{
-                    height: '180px',
-                    title: 'CPU',
-                    minValue: 0,
-                    maxValue: 100,
-                    value: host_data['os.cpus.percentage'] || 0,
-                  }
-                }"
-              />
-            </div>
-            <template v-for="(used, mount) in host_data['os.mounts.used']">
-              <div class="col" :key="host+'.'+mount+'.used'">
-                <vue-easy-pie-chart-wrapper
-                  :id="host+'.'+mount+'.used'"
-                  :chart="{
-                    class: 'netdata-chart netdata-easypiechart-chart',
-                    params:{
-                      'bar-color': '#AD69AD',
-                      'size': 150,
-                      'percent': used || 0,
-                      'title': 'Used: '+ mount,
-                      /* unit: 'kilobits/s', */
-                    }
-                  }"
-                />
-              </div>
-            </template>
-
-            <div class="col">
-              <vue-easy-pie-chart-wrapper
-                :id="host+'.ram'"
-                :chart="{
-                  class: 'netdata-chart netdata-easypiechart-chart',
-                  params:{
-                    'bar-color': '#66AA00',
-                    'size': 130,
-                    'percent': host_data['os.memory.percentage'] || 0,
-                    'title': 'Used RAM',
-                    /* unit: '%', */
-                    /**minValue: 0,
-                    maxValue: 100,
-                    unit: '%',
-                    value: host_data['os.cpus.percentage'] || 0,
-                    height: '200px',
-                    width: '334px' */
-                  }
-                }"
-              />
-            </div>
-          </div>
-
-        </div>
-      </template>
-    </Widget>
-
-    <!-- </q-card-section>
-
-    <q-card-section>
-    </q-card-section>
-
-    <q-separator dark />
-
-    <q-card-actions>
-      <q-btn
-        v-for="category in categories"
-        :key="host+'.'+category"
-        flat
-        :to="{
-          name: 'system_host',
-          params: { host: host },
-          hash: '#'+category
-        }"
-      >{{category}}</q-btn>
-    </q-card-actions>
-  </q-card> -->
-
+        <!-- <q-card-section> -->
+          <template v-for="(name) in periodical.plugins">
+            <!-- {{name}} -->
+            <system-plugin-dygraph
+              v-if="name.indexOf(category) > -1"
+              :ref="name+'.periodical'"
+              :id="'os.'+name+'.periodical'"
+              :name="name"
+              :key="$route.path +'.'+ JSON.stringify($route.query)+'.periodical'+name+'.plugin'"
+            />
+            <!-- :interval="1" -->
+          </template>
+        <!-- </q-card-section> -->
+      </Widget>
+      <!-- </q-card> -->
+    </template>
+  </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
 import * as Debug from 'debug'
-const debug = Debug('apps:system:components:hostCard')
+const debug = Debug('apps:system:components:host:periodical')
 
-// import JSPipeline from 'js-pipeline'
-// import Pipeline from '@apps/os/pipelines/index'
+import { date } from 'quasar'
 
-// import DataSourcesMixin from '@mixins/dataSources'
+import SystemPluginDygraph from '@apps/system/components/pluginDygraph'
 
-// import { requests, store } from './sources/index'
+import DataSourcesMixin from '@mixins/dataSources'
 
-import vGaugeWrapper from './wrappers/vGauge'
-import vueEasyPieChartWrapper from './wrappers/vueEasyPieChart'
+import JSPipeline from 'js-pipeline'
+// import Pipeline from '@apps/system/pipelines/host'
+
+// import { requests, store } from '../sources/host/periodical/index'
+import PeriodicalPipeline from '@apps/system/pipelines/host/periodical'
+
+import * as PeriodicalSources from '@apps/system/sources/host/periodical/index'
+
+import moment from 'moment'
+
+// import QCalendar from '@quasar/quasar-ui-qcalendar'
+
+// function leftClick (e) {
+//   return e.button === 0
+// }
+
+const roundMilliseconds = function (timestamp) {
+  let d = new Date(timestamp)
+  d.setMilliseconds(0)
+
+  return d.getTime()
+}
+
+const roundSeconds = function (timestamp) {
+  timestamp = roundMilliseconds(timestamp)
+  let d = new Date(timestamp)
+  d.setSeconds(0)
+
+  return d.getTime()
+}
+
+const roundMinutes = function (timestamp) {
+  timestamp = roundSeconds(timestamp)
+  let d = new Date(timestamp)
+  d.setMinutes(0)
+
+  return d.getTime()
+}
+const roundHours = function (timestamp) {
+  timestamp = roundMinutes(timestamp)
+  let d = new Date(timestamp)
+  d.setHours(0)
+
+  return d.getTime()
+}
+const SECOND = 1000
+const MINUTE = 60 * SECOND
+const HOUR = 60 * MINUTE
+const DAY = HOUR * 24
+const WEEK = DAY * 7
 
 export default {
-  // mixins: [DataSourcesMixin],
-  // extends: DataSourcesMixin,
-  components: { vGaugeWrapper, vueEasyPieChartWrapper },
+  mixins: [DataSourcesMixin],
 
-  name: 'systemHostCard',
+  components: { SystemPluginDygraph },
 
-  // pipelines: {},
-  // __pipelines_cfg: {},
-  // unwatch_store: undefined,
+  name: 'SystemHostPeriodical',
 
-  props: {
-    show_categories: {
-      type: Boolean,
-      default: true
-    },
-    host: {
-      type: String,
-      default: ''
-    },
-    host_data: {
-      type: Object,
-      default: () => ({})
-    },
-    categories: {
-      type: Array,
-      default: function () { return [] }
-    }
+  periodical: {
+    plugins_data: {},
+    length: 360,
+    interval: 60
   },
+
+  req_components: {
+    'input.system.host.periodical': {
+      range: {
+        source: {
+          requests: PeriodicalSources.requests
+          // store: store
+        }
+      }
+    },
+
+  },
+
   data () {
     return {
+      id: 'system.host.periodical',
+      path: 'all',
+
+      periodical: {
+        plugins_data: {},
+        plugins: [],
+        // plugins_config: {},
+        plugins_categories: [],
+        range: { start: 0, end: 0},
+        timestamp: 0,
+      },
+
+      store: false,
+      // pipeline_id: 'input.system.host',
+      pipeline_id: [
+        'input.system.host.periodical',
+      ],
 
     }
-  }
+  },
+
+  methods: {
+    set_plugin_data: function (plugin, data, type, refresh) {
+      if (type === 'minute') { debug('set_plugin_data %s %o %s', plugin, data, type) }
+
+      // Object.each(data, function (value, plugin) {
+      if (this.$refs[plugin + '.' + type] && this.$refs[plugin + '.' + type][0] && !this.$refs[plugin + '.' + type][0].$options.plugin_data['system.' + plugin + '.' + type]) {
+        this.$refs[plugin + '.' + type][0].$options.plugin_data['system.' + plugin + '.' + type] = { periodical: undefined, minute: undefined }
+      }
+
+      if (!this.$options[type].plugins_data[this.host]) {
+        this.$options[type].plugins_data[this.host] = {}
+      }
+
+      if (!this.$options[type].plugins_data[this.host][plugin]) {
+        this.$options[type].plugins_data[this.host][plugin] = { periodical: Object.clone(data) }
+      } else if (refresh !== true) {
+        // this.$options[type].plugins_data[this.host][plugin].push(Object.clone(value))
+        Object.each(data, function (val, prop) {
+          // this.$options[type].plugins_data[this.host][plugin].periodical[prop].append(val)
+          let val_not_found = []
+          Array.each(this.$options[type].plugins_data[this.host][plugin].periodical[prop], function (row) {
+            // debug('periodical.plugins_data %d', row[0], val[0][0])
+
+            Array.each(val, function (val_row, val_row_index) {
+              if (row[0] !== val_row[0] && !val_not_found.contains(val_row_index)) { // timestamp exist
+                val_not_found.push(val_row_index)
+              } else if (row[0] === val_row[0] && val_not_found.contains(val_row_index)) {
+                val_not_found = val_not_found.erase(val_row_index)
+              }
+            })
+          })
+
+          // debug('periodical.plugins_data to add %o', val_not_found)
+          Array.each(val_not_found, function (index) {
+            this.$options[type].plugins_data[this.host][plugin].periodical[prop].push(val[index])
+          }.bind(this))
+          // if (found === false) {
+          //   this.$options[type].plugins_data[this.host][plugin].periodical[prop].push(val)
+          // }
+          // this.$options[type].plugins_data[this.host][plugin].periodical[prop].sort(function (b, a) { return (a[0] > b[0]) ? 1 : ((b[0] > a[0]) ? -1 : 0) })
+          // this.$options[type].plugins_data[this.host][plugin].periodical[prop] = this.$options[type].plugins_data[this.host][plugin].periodical[prop].slice(0, this.$options[type].length)
+          // this.$options[type].plugins_data[this.host][plugin].periodical[prop].sort(function (a, b) { return (a[0] > b[0]) ? 1 : ((b[0] > a[0]) ? -1 : 0) })
+        }.bind(this))
+      }
+
+      if (this.$refs[plugin + '.' + type] && this.$refs[plugin + '.' + type][0]) {
+        if (type === 'minute') {
+          debug('set_plugin_data TO PLUGIN %s %o %s', plugin, this.$options[type].plugins_data[this.host][plugin].periodical, type)
+        }
+        // this.$options[type].plugins_data[this.host][plugin] = this.$options[type].plugins_data[this.host][plugin].slice(0, 360)
+        //
+        // if (this.$options[type].plugins_data[this.host][plugin] && this.$options[type].plugins_data[this.host][plugin].length > 0) {
+        //   debug('periodical.plugins_data from BUFFER %o', this.$options[type].plugins_data[this.host][plugin])
+        //   Array.each(this.$options[type].plugins_data[this.host][plugin], function (value) {
+        //     this.$refs[plugin + '.' + type][0].set_data(Object.clone(value))
+        //   }.bind(this))
+        //
+        //   // this.$options[type].plugins_data[this.host][plugin] = []
+        // }
+        // this.$refs[plugin + '.' + type][0].set_data(this.$options[type].plugins_data[this.host][plugin])
+
+        let count = 0
+        Object.each(data, function (val, prop) {
+          this.$options[type].plugins_data[this.host][plugin].periodical[prop].sort(function (b, a) { return (a[0] > b[0]) ? 1 : ((b[0] > a[0]) ? -1 : 0) })
+          this.$options[type].plugins_data[this.host][plugin].periodical[prop] = this.$options[type].plugins_data[this.host][plugin].periodical[prop].slice(0, this.$options[type].length)
+          this.$options[type].plugins_data[this.host][plugin].periodical[prop].sort(function (a, b) { return (a[0] > b[0]) ? 1 : ((b[0] > a[0]) ? -1 : 0) })
+
+          if (count === Object.getLength(data) - 1) {
+            this.$refs[plugin + '.' + type][0].set_data(Object.clone(this.$options[type].plugins_data[this.host][plugin]))
+          }
+
+          count++
+        }.bind(this))
+      } else { // buffer data until plugin available
+        //   debug('periodical.plugins_data BUFFER %o', data)
+        setTimeout(function () {
+          if (this.$options[type].plugins_data[this.host] && this.$options[type].plugins_data[this.host][plugin]) {
+            this.set_plugin_data(plugin, Object.clone(this.$options[type].plugins_data[this.host][plugin].periodical), type, true)
+          }
+        }.bind(this), 1000)
+      }
+      // }.bind(this))
+    },
+    /**
+    * @start pipelines
+    **/
+    create_pipelines: function (create_id, next) {
+      debug('create_pipelines %o', this.$options.pipelines)
+
+      const pipelines = [PeriodicalPipeline] //,
+      Array.each(pipelines, function (Pipeline, index) {
+        // if (this.tab === index) {
+        let template = Object.clone(Pipeline)
+
+        debug('create_pipelines template %o', template)
+
+        let pipeline_id = template.input[0].poll.id
+        if (!create_id || create_id === undefined || create_id === pipeline_id) {
+          // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components[pipeline_id], pipeline_id)
+          Array.each(template.input[0].poll.conn, function (conn, index) {
+            template.input[0].poll.conn[index].requests = this.__components_sources_to_requests(this.$options.req_components[pipeline_id], pipeline_id)
+          }.bind(this))
+
+          let pipe = new JSPipeline(template)
+
+          this.$options.__pipelines_cfg[pipeline_id] = {
+            ids: [],
+            connected: [],
+            suspended: pipe.inputs.every(function (input) { return input.options.suspended }, this)
+          }
+
+          // this.__after_connect_inputs(
+          //   pipe,
+          //   this.$options.__pipelines_cfg[pipeline_id],
+          //   this.__resume_pipeline.pass([pipe, this.$options.__pipelines_cfg[pipeline_id], this.id, function () {
+          //     debug('__resume_pipeline CALLBACK')
+          //     pipe.fireEvent('onOnce')
+          //   }], this)
+          // )
+
+          this.$options.pipelines[pipeline_id] = pipe
+        }
+        // }
+      }.bind(this))
+
+      debug('create_pipelines %o', this.$options.pipelines)
+
+      if (next) { next() }
+      // }
+    },
+    destroy: function () {
+      this.$options['periodical'].plugins_data = {}
+    },
+
+    /**
+    * @end pipelines
+    **/
+    end: function () {
+      // if (this.current_day === undefined) {
+      return Date.now()
+      // } else {
+      // return this.current_day
+      // }
+    },
+
+    format_time: function (timestamp) {
+      return moment(timestamp).format('dddd, MMMM Do YYYY, h:mm:ss a')
+    },
+
+  },
+  computed: {
+    // 'periodical_plugins_data': function () {
+    //   return this.periodical.plugins_data
+    // },
+    'host': function () {
+      return (this.$route && this.$route.params && this.$route.params.host) ? this.$route.params.host : undefined
+    }
+  },
 
 }
 </script>

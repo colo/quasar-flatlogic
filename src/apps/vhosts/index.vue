@@ -299,7 +299,7 @@ import PeriodicalPipeline from '@apps/vhosts/pipelines/periodical/index'
 
 import * as PeriodicalSources from '@apps/vhosts/sources/periodical/index'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import moment from 'moment'
 

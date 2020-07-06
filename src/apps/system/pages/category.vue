@@ -32,7 +32,7 @@ const debug = Debug('apps:system:pages:category')
 
 import SystemPluginDygraph from '@apps/system/components/pluginDygraph'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import JSPipeline from 'js-pipeline'
 import Pipeline from '@apps/system/pipelines/category'

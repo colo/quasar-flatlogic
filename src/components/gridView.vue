@@ -145,7 +145,7 @@ import { mapState, mapGetters } from 'vuex'
 import { dom } from 'quasar'
 const { height, width } = dom
 
-import DynamicEvents from '@components/mixins/dynamicEvents'
+import DynamicEvents from '@mixins/dynamicEvents'
 
 export default {
   name: 'GridView',

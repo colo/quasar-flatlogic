@@ -13,7 +13,7 @@ import VueTouch from 'vue-touch'
 import Trend from 'vuetrend'
 import Toasted from 'vue-toasted'
 import VueApexCharts from 'vue-apexcharts'
-import layoutMixin from 'src/mixins/layout'
+import layoutMixin from 'src/mixins/flatlogic/layout'
 import Widget from 'src/components/flatlogic/Widget/Widget'
 
 // leave the export, even if you don't use it

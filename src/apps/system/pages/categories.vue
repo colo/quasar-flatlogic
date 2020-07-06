@@ -38,7 +38,7 @@ const debug = Debug('apps:system:pages:categories')
 import JSPipeline from 'js-pipeline'
 import Pipeline from '@apps/system/pipelines/categories'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import SystemCategoryCard from '@apps/system/components/categoryCard.vue'
 

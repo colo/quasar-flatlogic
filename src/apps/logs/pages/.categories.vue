@@ -116,7 +116,7 @@ const debug = Debug('apps:os:pages:categories')
 import JSPipeline from 'js-pipeline'
 import Pipeline from '@apps/os/pipelines/categories'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import OsCategoryCard from '@apps/os/components/categoryCard.vue'
 

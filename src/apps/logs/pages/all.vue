@@ -204,7 +204,7 @@ const debug = Debug('apps:logs:pages:all')
 import JSPipeline from 'js-pipeline'
 import Pipeline from '@apps/logs/pipelines//all'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 // import LogsWebCard from '@apps/logs/components/webCard.vue'
 

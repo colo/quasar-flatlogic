@@ -447,7 +447,7 @@ import { date } from 'quasar'
 
 import BarRace from '@apps/logs/components/barRace'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import JSPipeline from 'js-pipeline'
 

@@ -50,7 +50,7 @@ const debug = Debug('apps:system:pages:hosts')
 
 import JSPipeline from 'js-pipeline'
 // import Pipeline from '@apps/system/pipelines/hosts'
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import PeriodicalPipeline from '@apps/system/pipelines/hosts/periodical'
 import MinutePipeline from '@apps/system/pipelines/hosts/minute'

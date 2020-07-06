@@ -156,7 +156,7 @@ import JSPipeline from 'js-pipeline'
 import PeriodicalPipeline from '@apps/checks/pipelines/periodical/index'
 import * as PeriodicalSources from '@apps/checks/sources/periodical/index'
 
-import DataSourcesMixin from '@components/mixins/dataSources'
+import DataSourcesMixin from '@mixins/dataSources'
 
 import moment from 'moment'
 
