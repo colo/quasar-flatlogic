@@ -224,7 +224,7 @@ const hosts_range_component = {
 
             hosts_data[host][path] = current
             if (path === 'os.cpus') {
-              let total = hosts_data[host][path].cores * 10000
+              let total = hosts_data[host][path].cores * 1000 // 10000 was for old node version (looks like a bug, 1000 makes sense)
               let used = total - hosts_data[host][path].idle
               let percentage = ((used * 100) / total).toFixed(1) * 1
               if (percentage >= 0) {
@@ -337,7 +337,7 @@ const hosts_range_component = {
 
       max_loadavg['*'] = _all_hosts['os.loadavg.max']
 
-      let total = _all_hosts['os.cpus'].cores * 10000
+      let total = _all_hosts['os.cpus'].cores * 1000 // 10000 was for old node version (looks like a bug, 1000 makes sense)
       let used = total - _all_hosts['os.cpus'].idle
       let percentage = ((used * 100) / total).toFixed(1) * 1
       if (percentage >= 0) {
